@@ -1,0 +1,24 @@
+
+ARG BOOTSTRAP_OPTS
+
+RUN mkdir -p ./sources
+COPY . ./sources
+
+# Bootstrap Gentoo Prefix
+RUN set -e \
+  ; set -x \
+  ; printenv \
+  ; wget -O ./bootstrap-prefix.sh https://gitweb.gentoo.org/repo/proj/prefix.git/plain/scripts/bootstrap-prefix.sh \
+  ; chmod +x ./bootstrap-prefix.sh \
+  ; "$(pwd)"/sources/prefix/perform-bootstrap.sh \
+	--bootstrap-prefix-sh="$(pwd)"/bootstrap-prefix.sh \
+	--prefix=/tmp/gentoo \
+	--resume=no \
+	--tree-date=latest \
+	--portage-pv=testing \
+	--gentoo-mirrors="http://ftp.fau.de/gentoo" \
+	--proxy="${AGENT_PROXYURL}" \
+	--rap=no \
+	--force-32bit=no \
+	${BOOTSTRAP_OPTS} \
+  ; :

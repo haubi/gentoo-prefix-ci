@@ -5,6 +5,12 @@ RUN dnf install @development-tools -y
 RUN dnf install gcc-c++ -y
 RUN dnf install sudo -y
 
+# we don't have ssl support in stage0 wget yet
+RUN dnf install wget -y
+
+# python does recognize /usr/lib/libcrypt.so file only
+RUN dnf install glibc-devel.i686 -y
+
 # Create user
 RUN useradd --create-home --shell=/bin/bash user
 RUN chown -R user /home/user/

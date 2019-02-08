@@ -1,0 +1,14 @@
+
+FROM fedora
+
+# make             # stage1 make fails with https://bugs.gentoo.org/646558
+# m4               # stage1 m4 fails with https://bugs.gentoo.org/663924
+# findutils        # stage1 findutils fails with https://bugs.gentoo.org/663242
+# glibc-devel.i686 # python does look for /usr/lib/libcrypt.so file only
+RUN set -e \
+  ; dnf check-update || : \
+  ; dnf install -y gcc-c++ wget sudo \
+  ; dnf install -y make m4 findutils glibc-devel.i686 \
+  ; :
+
+ENV SUDO_GROUP wheel

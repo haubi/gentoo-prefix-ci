@@ -1,0 +1,12 @@
+
+FROM fedora:28
+
+# make             # stage1 make fails with https://bugs.gentoo.org/646558
+# glibc-devel.i686 # python does look for /usr/lib/libcrypt.so file only
+RUN set -e \
+  ; dnf check-update || : \
+  ; dnf install -y gcc-c++ wget sudo \
+  ; dnf install -y make glibc-devel.i686 \
+  ; :
+
+ENV SUDO_GROUP wheel

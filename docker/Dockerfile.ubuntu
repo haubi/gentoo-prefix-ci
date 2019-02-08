@@ -1,0 +1,10 @@
+
+FROM ubuntu
+
+# make           # stage1 make fails with https://bugs.gentoo.org/646558
+# libc6-dev-i386 # python does look for /usr/lib/libcrypt.so file only
+RUN set -e \
+  ; apt-get update \
+  ; apt-get install -y g++ wget sudo \
+  ; apt-get install -y make libc6-dev-i386 \
+  ; :

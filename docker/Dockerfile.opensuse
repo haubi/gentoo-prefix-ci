@@ -1,0 +1,12 @@
+
+FROM opensuse
+
+# make              # stage1 make fails with https://bugs.gentoo.org/646558
+# glibc-devel-32bit # python does look for /usr/lib/libcrypt.so file only
+RUN set -e \
+  ; zypper --non-interactive update \
+  ; zypper --non-interactive install gcc-c++ wget tar sudo \
+  ; zypper --non-interactive install make glibc-devel-32bit \
+  ; :
+
+ENV SUDO_GROUP wheel

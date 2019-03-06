@@ -21,6 +21,8 @@ default-settings() {
 	PREFIX=
 	RESUME=false
 	LINUX32=
+	UPLOAD_RESULTS=false
+	UPLOAD_RESULTS_TO="rsync1.prefix.bitzolder.nl::gentoo-portage-bootstraps"
 	export PREFIX_DISABLE_RAP=yes
 	unset GENTOO_MIRRORS
 	unset LATEST_TREE_YES TESTING_PV
@@ -73,6 +75,12 @@ decode-settings() {
 			RSYNC_PROXY=${ftp_proxy#*://}
 			export ftp_proxy http_proxy https_proxy RSYNC_PROXY 
 			;;
+		--upload-results=yes)
+			UPLOAD_RESULTS=:
+			;;
+		--upload-results=no)
+			UPLOAD_RESULTS=false
+			;;
 		--gentoo-mirrors=)
 			unset GENTOO_MIRRORS
 			;;
@@ -94,8 +102,56 @@ perform-bootstrap() {
 	mkdir -p "${PREFIX}"
 	>> "${PREFIX}"/bootstrap.log
 	tail -f "${PREFIX}"/bootstrap.log &
-	TRAPS+=( "sleep 5" "kill $!" )
+	TRAPS+=( "sleep 20" "kill $!" "wait" )
+	TRAPS+=( "maybe-upload-results --start-seconds=${SECONDS}" )
 	${LINUX32} "${BOOTSTRAP_PREFIX_SH}" "${PREFIX}" noninteractive >> "${PREFIX}"/bootstrap.log 2>&1
+}
+
+maybe-upload-results() {
+	local end_seconds=${SECONDS}
+	local start_seconds=0
+
+	${UPLOAD_RESULTS} || return 0
+	[[ -r ${PREFIX}/. ]] || return 0
+
+	[[ -x /usr/bin/rsync ]] || die "Missing /usr/bin/rsync for upload"
+
+	local hostname=$(hostname)
+	[[ ${hostname} ]] || die "Failed to identify hostname for uplad"
+
+	local chost=$(${LINUX32} "${BOOTSTRAP_PREFIX_SH}" chost.guess x || :)
+	[[ ${chost} ]] || die "Failed to identify chost for upload"
+
+	local date=$(date '+%Y%m%d' -d "$(<"${PREFIX}"/usr/portage/timestamp)" || :)
+	[[ ${date} ]] || die "Failed to identify date for uplad"
+
+	local arg
+	for arg in "$@"
+	do
+		case ${arg} in
+		--start-seconds=*)
+			start_seconds=${arg#--start-seconds=}
+			;;
+		esac
+	done
+	echo $((end_seconds - start_seconds)) > "${PREFIX}"/elapsedtime
+
+	rsync -q /dev/null "${UPLOAD_RESULTS_TO}"/${hostname}-$$/
+	rsync -q /dev/null "${UPLOAD_RESULTS_TO}"/${hostname}-$$/${chost}/
+	rsync -rltv \
+		--exclude=work/ \
+		--exclude=homedir/ \
+		--exclude=files \
+		--exclude=distdir/ \
+		--exclude=image/ \
+		"${PREFIX}"/{stage,.stage}* \
+		"${BOOTSTRAP_PREFIX_SH}" \
+		"${PREFIX}"/startprefix \
+		"${PREFIX}"/elapsedtime \
+		"${PREFIX}"/var/tmp/portage \
+		"${PREFIX}"/var/log/emerge.log \
+		"${UPLOAD_RESULTS_TO}"/${hostname}-$$/${chost}/${date}/
+	rsync -q /dev/null "${UPLOAD_RESULTS_TO}"/${hostname}-$$/${chost}/${date}/push-complete/
 }
 
 default-settings
@@ -103,4 +159,4 @@ decode-settings "$@"
 validate-settings
 perform-bootstrap
 
-true
+exit $?

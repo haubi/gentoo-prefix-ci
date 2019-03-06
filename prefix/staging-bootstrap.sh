@@ -17,12 +17,15 @@ die() {
 
 SOURCES=
 STAGING=
+UPLOAD_RESULTS=no
 
 for arg in "$@"
 do
 	case ${arg} in
 	--sources=*) SOURCES=${arg#--sources=} ;;
 	--staging=*) STAGING=${arg#--staging=} ;;
+	--upload-results=yes) UPLOAD_RESULTS=yes ;;
+	--upload-results=no) UPLOAD_RESULTS=no ;;
 	esac
 done
 
@@ -48,4 +51,5 @@ chmod +x ./bootstrap-prefix.sh
 	--rap=no \
 	--tree-date=latest \
 	--portage-pv=testing \
-	--proxy="${AGENT_PROXYURL}"
+	--proxy="${AGENT_PROXYURL}" \
+	--upload-results=${UPLOAD_RESULTS}

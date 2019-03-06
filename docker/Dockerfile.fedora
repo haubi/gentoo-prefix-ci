@@ -1,14 +1,34 @@
 
 FROM fedora
 
+ARG BOOTSTRAP_OPTS
+
+# gcc-c++                     # would install "gcc-c++.x86_64", but:
+# gcc-c++        gcc-c++.i686 # would install "gcc-c++.i686" only, so need:
+# gcc-c++.x86_64 gcc-c++.i686 # to install both, but both just depend on:
+# libstdc++-devel             # without their specific arch - need both
+# glibc-devel.i686 # python does look for /usr/lib/libcrypt.so file only
 # make             # stage1 make fails with https://bugs.gentoo.org/646558
 # m4               # stage1 m4 fails with https://bugs.gentoo.org/663924
 # findutils        # stage1 findutils fails with https://bugs.gentoo.org/663242
-# glibc-devel.i686 # python does look for /usr/lib/libcrypt.so file only
-RUN set -e \
+RUN set -x \
+  ; set -e \
   ; dnf check-update || : \
-  ; dnf install -y gcc-c++ wget sudo \
-  ; dnf install -y make m4 findutils glibc-devel.i686 \
+  ; pkgs="gcc-c++.x86_64 libstdc++-devel.x86_64" \
+  ; for arg in ${BOOTSTRAP_OPTS} \
+  ; do case ${arg} in \
+       --force-32bit=yes) : \
+	     ; pkgs="${pkgs} gcc-c++.i686 libstdc++-devel.i686" \
+		 ;; \
+	   esac \
+  ; done \
+  ; pkgs="${pkgs} wget" \
+  ; pkgs="${pkgs} sudo" \
+  ; pkgs="${pkgs} glibc-devel.i686" \
+  ; pkgs="${pkgs} make" \
+  ; pkgs="${pkgs} m4" \
+  ; pkgs="${pkgs} findutils" \
+  ; dnf install -y ${pkgs} \
   ; :
 
 ENV SUDO_GROUP wheel

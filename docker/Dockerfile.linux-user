@@ -2,7 +2,8 @@
 # Create user
 # Add the user to sudoers
 # Give the user a password
-RUN set -e \
+RUN set -x \
+  ; set -e \
   ; useradd --user-group --create-home --groups ${SUDO_GROUP:-sudo} --shell=/bin/bash user \
   ; ls -la /home/user \
   ; ls -ld /etc/sudoers* \

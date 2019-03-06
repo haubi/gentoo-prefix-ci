@@ -5,8 +5,8 @@ RUN mkdir -p ./sources
 COPY . ./sources
 
 # Bootstrap Gentoo Prefix
-RUN set -e \
-  ; set -x \
+RUN set -x \
+  ; set -e \
   ; printenv \
   ; wget -O ./bootstrap-prefix.sh https://gitweb.gentoo.org/repo/proj/prefix.git/plain/scripts/bootstrap-prefix.sh \
   ; chmod +x ./bootstrap-prefix.sh \

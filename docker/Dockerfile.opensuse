@@ -1,12 +1,27 @@
 
 FROM opensuse
 
-# make              # stage1 make fails with https://bugs.gentoo.org/646558
+ARG BOOTSTRAP_OPTS
+
 # glibc-devel-32bit # python does look for /usr/lib/libcrypt.so file only
-RUN set -e \
+# make              # stage1 make fails with https://bugs.gentoo.org/646558
+RUN set -x \
+  ; set -e \
   ; zypper --non-interactive update \
-  ; zypper --non-interactive install gcc-c++ wget tar sudo \
-  ; zypper --non-interactive install make glibc-devel-32bit \
+  ; pkgs="gcc-c++" \
+  ; for arg in ${BOOTSTRAP_OPTS} \
+  ; do case ${arg} in \
+       --force-32bit=yes) : \
+	     ; pkgs="${pkgs} gcc-c++-32bit" \
+		 ;; \
+	   esac \
+  ; done \
+  ; pkgs="${pkgs} wget" \
+  ; pkgs="${pkgs} tar" \
+  ; pkgs="${pkgs} sudo" \
+  ; pkgs="${pkgs} glibc-devel-32bit" \
+  ; pkgs="${pkgs} make" \
+  ; zypper --non-interactive install ${pkgs} \
   ; :
 
 ENV SUDO_GROUP wheel

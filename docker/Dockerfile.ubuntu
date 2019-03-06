@@ -1,10 +1,24 @@
 
 FROM ubuntu
 
-# make           # stage1 make fails with https://bugs.gentoo.org/646558
+ARG BOOTSTRAP_OPTS
+
 # libc6-dev-i386 # python does look for /usr/lib/libcrypt.so file only
-RUN set -e \
+# make           # stage1 make fails with https://bugs.gentoo.org/646558
+RUN set -x \
+  ; set -e \
   ; apt-get update \
-  ; apt-get install -y g++ wget sudo \
-  ; apt-get install -y make libc6-dev-i386 \
+  ; pkgs="g++" \
+  ; for arg in ${BOOTSTRAP_OPTS} \
+  ; do case ${arg} in \
+       --force-32bit=yes) \
+	     pkgs="g++-multilib" \
+	     ;; \
+	   esac \
+  ; done \
+  ; pkgs="${pkgs} wget" \
+  ; pkgs="${pkgs} sudo" \
+  ; pkgs="${pkgs} libc6-dev-i386" \
+  ; pkgs="${pkgs} make" \
+  ; apt-get install -y ${pkgs} \
   ; :

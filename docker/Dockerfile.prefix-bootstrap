@@ -16,7 +16,6 @@ RUN set -e \
 	--resume=no \
 	--tree-date=latest \
 	--portage-pv=testing \
-	--gentoo-mirrors="http://ftp.fau.de/gentoo" \
 	--proxy="${AGENT_PROXYURL}" \
 	--rap=no \
 	--force-32bit=no \

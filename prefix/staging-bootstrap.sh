@@ -18,6 +18,7 @@ die() {
 SOURCES=
 STAGING=
 UPLOAD_RESULTS=no
+GENTOO_MIRRORS=
 
 for arg in "$@"
 do
@@ -26,6 +27,7 @@ do
 	--staging=*) STAGING=${arg#--staging=} ;;
 	--upload-results=yes) UPLOAD_RESULTS=yes ;;
 	--upload-results=no) UPLOAD_RESULTS=no ;;
+	--gentoo-mirrors=*) GENTOO_MIRRORS="${arg#--gentoo-mirrors=}" ;;
 	esac
 done
 
@@ -52,4 +54,5 @@ chmod +x ./bootstrap-prefix.sh
 	--tree-date=latest \
 	--portage-pv=testing \
 	--proxy="${AGENT_PROXYURL}" \
+	--gentoo-mirrors="${GENTOO_MIRRORS}" \
 	--upload-results=${UPLOAD_RESULTS}

@@ -42,14 +42,14 @@ jobs:
           docker_os: fedora
           prefix_rap: no
           prefix_32bit: yes
-#       fedora_rap:
-#         docker_os: fedora
-#         prefix_rap: yes
-#         prefix_32bit: no
-#       fedora_rap_x86:
-#         docker_os: fedora
-#         prefix_rap: yes
-#         prefix_32bit: yes
+        fedora_rap:
+          docker_os: fedora
+          prefix_rap: yes
+          prefix_32bit: no
+        fedora_rap_x86:
+          docker_os: fedora
+          prefix_rap: yes
+          prefix_32bit: yes
         fedora28:
           docker_os: fedora28
           prefix_rap: no
@@ -58,14 +58,14 @@ jobs:
           docker_os: fedora28
           prefix_rap: no
           prefix_32bit: yes
-#       fedora28_rap:
-#         docker_os: fedora28
-#         prefix_rap: yes
-#         prefix_32bit: no
-#       fedora28_rap_x86:
-#         docker_os: fedora28
-#         prefix_rap: yes
-#         prefix_32bit: yes
+        fedora28_rap:
+          docker_os: fedora28
+          prefix_rap: yes
+          prefix_32bit: no
+        fedora28_rap_x86:
+          docker_os: fedora28
+          prefix_rap: yes
+          prefix_32bit: yes
         opensuse:
           docker_os: opensuse
           prefix_rap: no
@@ -74,14 +74,14 @@ jobs:
           docker_os: opensuse
           prefix_rap: no
           prefix_32bit: yes
-#       opensuse_rap:
-#         docker_os: opensuse
-#         prefix_rap: yes
-#         prefix_32bit: no
-#       opensuse_rap_x86:
-#         docker_os: opensuse
-#         prefix_rap: yes
-#         prefix_32bit: yes
+        opensuse_rap:
+          docker_os: opensuse
+          prefix_rap: yes
+          prefix_32bit: no
+        opensuse_rap_x86:
+          docker_os: opensuse
+          prefix_rap: yes
+          prefix_32bit: yes
         ubuntu_rap:
           docker_os: ubuntu
           prefix_rap: yes
@@ -90,14 +90,14 @@ jobs:
           docker_os: ubuntu
           prefix_rap: yes
           prefix_32bit: yes
-#       ubuntu16_rap:
-#         docker_os: ubuntu16
-#         prefix_rap: yes
-#         prefix_32bit: no
-#       ubuntu16_rap_x86:
-#         docker_os: ubuntu16
-#         prefix_rap: yes
-#         prefix_32bit: yes
+        ubuntu16_rap:
+          docker_os: ubuntu16
+          prefix_rap: yes
+          prefix_32bit: no
+        ubuntu16_rap_x86:
+          docker_os: ubuntu16
+          prefix_rap: yes
+          prefix_32bit: yes
     pool:
       vmImage: 'ubuntu-16.04'
     steps:

@@ -6,4 +6,7 @@ Invoke-WebRequest -Uri https://cygwin.com/setup-x86_64.exe -Proxy $env:AGENT_PRO
 
 $cygroot = $env:BUILD_ARTIFACTSTAGINGDIRECTORY
 
-.\setup-x86_64.exe --arch x86_64 --delete-orphans --force-current --no-admin --no-desktop --no-replaceonreboot --no-shortcuts --no-startmenu --no-version-check --only-site --site http://mirror.easyname.at/cygwin/ --quiet-mode --proxy $env:AGENT_PROXYURL --local-package-dir $env:AGENT_WORKFOLDER --root $cygroot --upgrade-also --verbose --packages wget,gcc-g++,rsync
+$proxyarg = ""
+if ( $env:AGENT_PROXYURL ) { $proxyarg = "--proxy $env:AGENT_PROXYURL" }
+
+.\setup-x86_64.exe --arch x86_64 --delete-orphans --force-current --no-admin --no-desktop --no-replaceonreboot --no-shortcuts --no-startmenu --no-version-check --only-site --site http://mirror.easyname.at/cygwin/ --quiet-mode $proxyarg --local-package-dir $env:AGENT_WORKFOLDER --root $cygroot --upgrade-also --verbose --packages wget,gcc-g++,rsync

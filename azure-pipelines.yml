@@ -8,7 +8,7 @@ jobs:
   - job: "Cygwin"
     timeoutInMinutes: 0
     pool:
-      name: 'win2k19'
+      name: 'Provided Windows 2019'
     steps:
     - script: set
       displayName: 'Cygwin Info'

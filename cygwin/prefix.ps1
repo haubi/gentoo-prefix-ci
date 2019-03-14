@@ -10,5 +10,5 @@ Set-Location -Path $cygroot
 .\bin\bash.exe --noprofile --norc -c 'exec 2>&1; set -x; sources=$(/bin/cygpath -m \"${BUILD_SOURCESDIRECTORY}\"); sources=${sources// /\\\\040}; echo \"${sources} /sources auto text,user 0 0\" >> /etc/fstab'
 .\bin\mount.exe
 
-.\bin\bash.exe --noprofile --norc -c 'exec 2>&1; set -x; upload=yes; [[ $(/bin/hostname) == cygwin2019 ]] || upload=no; /bin/bash /sources/prefix/staging-bootstrap.sh --sources=/sources --staging=\"$(/bin/cygpath -u \"${BUILD_STAGINGDIRECTORY}\")\" --upload-results=${upload}'
+.\bin\bash.exe --noprofile --norc -c 'exec 2>&1; set -x; upload=yes; [[ $(/bin/hostname) == vsts* ]] || upload=no; /bin/bash /sources/prefix/staging-bootstrap.sh --sources=/sources --staging=\"$(/bin/cygpath -u \"${BUILD_STAGINGDIRECTORY}\")\" --upload-results=${upload}'
 exit $LastExitCode

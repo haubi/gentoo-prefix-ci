@@ -42,6 +42,7 @@ cd "${STAGING}" || die "failed to enter staging directory (${STAGING})"
 (
 	unset https_proxy
 	[[ -z ${AGENT_PROXYURL} ]] || export https_proxy=${AGENT_PROXYURL}
+	echo "found wget: ($(type -t wget)) $(type wget)"
 	wget -O ./bootstrap-prefix.sh https://gitweb.gentoo.org/repo/proj/prefix.git/plain/scripts/bootstrap-prefix.sh
 )
 chmod +x ./bootstrap-prefix.sh

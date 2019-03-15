@@ -7,8 +7,16 @@
 jobs:
   - job: "Cygwin"
     timeoutInMinutes: 0
+    strategy:
+      matrix:
+        Server_2012R2:
+          server_version: '2012'
+        Server_2016:
+          server_version: '2016'
+        Server_2019:
+          server_version: '2019'
     pool:
-      name: 'Provided Windows 2019'
+      name: 'Provided Windows $(server_version)'
     steps:
     - script: set
       displayName: 'Cygwin Info'

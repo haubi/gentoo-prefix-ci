@@ -100,11 +100,9 @@ validate-settings() {
 
 perform-bootstrap() {
 	mkdir -p "${PREFIX}"
-	>> "${PREFIX}"/bootstrap.log
-	tail -f "${PREFIX}"/bootstrap.log &
-	TRAPS+=( "sleep 20" "kill $!" "wait" )
 	TRAPS+=( "maybe-upload-results --start-seconds=${SECONDS}" )
-	${LINUX32} "${BOOTSTRAP_PREFIX_SH}" "${PREFIX}" noninteractive >> "${PREFIX}"/bootstrap.log 2>&1
+	${LINUX32} "${BOOTSTRAP_PREFIX_SH}" "${PREFIX}" noninteractive 2>&1 |
+		tee -a "${PREFIX}"/bootstrap.log
 }
 
 maybe-upload-results() {

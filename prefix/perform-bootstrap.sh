@@ -110,6 +110,7 @@ perform-bootstrap() {
 	TRAPS+=( "maybe-upload-results --start-seconds=${SECONDS}" )
 	${LINUX32} "${BOOTSTRAP_PREFIX_SH}" "${PREFIX}" noninteractive 2>&1 |
 		tee -a "${PREFIX}"/bootstrap.log
+	return ${PIPESTATUS[0]}
 }
 
 maybe-upload-results() {

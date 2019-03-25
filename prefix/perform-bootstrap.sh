@@ -25,6 +25,7 @@ default-settings() {
 	UPLOAD_RESULTS_TO="rsync1.prefix.bitzolder.nl::gentoo-portage-bootstraps"
 	export PREFIX_DISABLE_RAP=yes
 	unset GENTOO_MIRRORS
+	unset DISTDIR
 	unset LATEST_TREE_YES TESTING_PV
 	unset ftp_proxy http_proxy https_proxy RSYNC_PROXY 
 }
@@ -86,6 +87,12 @@ decode-settings() {
 			;;
 		--gentoo-mirrors=*)
 			export GENTOO_MIRRORS="${arg#--gentoo-mirrors=}"
+			;;
+		--gentoo-distdir=)
+			unset DISTDIR
+			;;
+		--gentoo-distdir=*)
+			export DISTDIR=${arg#--gentoo-distdir=}
 			;;
 		esac
 	done

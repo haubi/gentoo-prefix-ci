@@ -19,6 +19,7 @@ SOURCES=
 STAGING=
 UPLOAD_RESULTS=no
 GENTOO_MIRRORS=
+GENTOO_DISTDIR=
 
 for arg in "$@"
 do
@@ -28,6 +29,7 @@ do
 	--upload-results=yes) UPLOAD_RESULTS=yes ;;
 	--upload-results=no) UPLOAD_RESULTS=no ;;
 	--gentoo-mirrors=*) GENTOO_MIRRORS="${arg#--gentoo-mirrors=}" ;;
+	--gentoo-distdir=*) GENTOO_DISTDIR="${arg#--gentoo-distdir=}" ;;
 	esac
 done
 
@@ -56,4 +58,5 @@ chmod +x ./bootstrap-prefix.sh
 	--portage-pv=testing \
 	--proxy="${AGENT_PROXYURL}" \
 	--gentoo-mirrors="${GENTOO_MIRRORS}" \
+	--gentoo-distdir="${GENTOO_DISTDIR}" \
 	--upload-results=${UPLOAD_RESULTS}

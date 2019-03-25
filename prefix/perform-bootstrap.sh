@@ -23,6 +23,7 @@ default-settings() {
 	LINUX32=
 	UPLOAD_RESULTS=false
 	UPLOAD_RESULTS_TO="rsync1.prefix.bitzolder.nl::gentoo-portage-bootstraps"
+	export TREE_FROM_SRC="rsync.prefix.bitzolder.nl::gentoo-portage-prefix"
 	export PREFIX_DISABLE_RAP=yes
 	unset GENTOO_MIRRORS
 	unset DISTDIR

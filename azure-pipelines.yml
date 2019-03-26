@@ -31,6 +31,7 @@ jobs:
       displayName: 'perform Cygwin Prefix'
     - powershell: cat cygwin-prefix.out
       timeoutInMinutes: 0
+      condition: always()
       displayName: 'show Cygwin Prefix'
 
   - job: "MacOS"

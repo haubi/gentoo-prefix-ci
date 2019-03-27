@@ -37,6 +37,7 @@ jobs:
       displayName: 'perform Cygwin v$(cygwin_version) Setup'
     - powershell: Get-Content cygwin-setup.out
       timeoutInMinutes: 0
+      condition: always()
       displayName: 'show Cygwin v$(cygwin_version) Setup'
     - powershell: PowerShell -File cygwin/prefix.ps1 2>&1 > cygwin-prefix.out
       timeoutInMinutes: 0

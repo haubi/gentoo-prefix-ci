@@ -9,30 +9,42 @@ jobs:
     timeoutInMinutes: 0
     strategy:
       matrix:
-        Server_2012R2:
+        v2_win2012r2:
           server_version: '2012'
-        Server_2016:
+          cygwin_version: 2
+        v3_win2012r2:
+          server_version: '2012'
+          cygwin_version: 3
+        v2_win2016:
           server_version: '2016'
-        Server_2019:
+          cygwin_version: 2
+        v3_win2016:
+          server_version: '2016'
+          cygwin_version: 3
+        v2_win2019:
           server_version: '2019'
+          cygwin_version: 2
+        v3_win2019:
+          server_version: '2019'
+          cygwin_version: 3
     pool:
       name: 'Provided Windows $(server_version)'
     steps:
-    - script: set
-      displayName: 'Cygwin Info'
-    - powershell: PowerShell -File cygwin/setup.ps1 2>&1 > cygwin-setup.out
+    - powershell: Get-Variable | Tee-Object agent-env.out
+      displayName: 'Agent Info'
+    - powershell: PowerShell -File cygwin/setupv$(cygwin_version).ps1 2>&1 > cygwin-setup.out
       timeoutInMinutes: 0
-      displayName: 'perform Cygwin Setup'
-    - powershell: cat cygwin-setup.out
+      displayName: 'perform Cygwin v$(cygwin_version) Setup'
+    - powershell: Get-Content cygwin-setup.out
       timeoutInMinutes: 0
-      displayName: 'show Cygwin Setup'
+      displayName: 'show Cygwin v$(cygwin_version) Setup'
     - powershell: PowerShell -File cygwin/prefix.ps1 2>&1 > cygwin-prefix.out
       timeoutInMinutes: 0
-      displayName: 'perform Cygwin Prefix'
-    - powershell: cat cygwin-prefix.out
+      displayName: 'perform Gentoo Prefix bootstrap'
+    - powershell: Get-Content cygwin-prefix.out
       timeoutInMinutes: 0
       condition: always()
-      displayName: 'show Cygwin Prefix'
+      displayName: 'show Gentoo Prefix bootstrap'
 
   - job: "MacOS"
     timeoutInMinutes: 0

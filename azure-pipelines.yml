@@ -45,6 +45,11 @@ jobs:
       timeoutInMinutes: 0
       condition: always()
       displayName: 'show Gentoo Prefix bootstrap'
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: 'cygwin-prefix.out'
+        targetPath: 'cygwin-prefix.out'
+      condition: always()
 
   - job: "MacOS"
     timeoutInMinutes: 0

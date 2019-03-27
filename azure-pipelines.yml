@@ -57,7 +57,7 @@ jobs:
       timeoutInMinutes: 0
       displayName: 'MacOS Prefix'
 
-  - job: "Docker"
+  - job: "Linux"
     timeoutInMinutes: 0
     strategy:
       matrix:

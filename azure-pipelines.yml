@@ -30,7 +30,7 @@ jobs:
     pool:
       name: 'Provided Windows $(server_version)'
     steps:
-    - powershell: Get-Variable | Tee-Object agent-env.out
+    - powershell: Get-ChildItem 'Env:' | Tee-Object agent-env.out
       displayName: 'Agent Info'
     - powershell: PowerShell -File cygwin/setupv$(cygwin_version).ps1 2>&1 > cygwin-setup.out
       timeoutInMinutes: 0

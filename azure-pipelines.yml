@@ -48,8 +48,13 @@ jobs:
       displayName: 'show Gentoo Prefix bootstrap'
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: 'cygwin-prefix.out'
-        targetPath: 'cygwin-prefix.out'
+        artifactName: 'x86_64-pc-cygwin$(cygwin_version)w$(server_version)/gentoo-prefix'
+        targetPath: $(BUILD.STAGINGDIRECTORY)/gentoo-prefix
+      condition: always()
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: 'x86_64-pc-cygwin$(cygwin_version)w$(server_version)/cygwin-prefix.out'
+        targetPath: $(BUILD.SOURCESDIRECTORY)/cygwin-prefix.out
       condition: always()
 
   - job: "MacOS"

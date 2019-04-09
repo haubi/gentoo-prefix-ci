@@ -6,7 +6,7 @@ if ( ! $env:BUILD_ARTIFACTSTAGINGDIRECTORY ) { exit 1 }
 
 if ( ! $env:AGENT_PROXYURL ) { exit 1 }
 
-if ( ! $env:AGENT_WORKFOLDER ) { exit 1 }
+if ( ! $env:BUILD_BINARIESDIRECTORY ) { exit 1 }
 
 Set-Location -Path $env:BUILD_BINARIESDIRECTORY
 

@@ -10,6 +10,8 @@ if ( ! $env:BUILD_BINARIESDIRECTORY ) { exit 1 }
 
 Set-Location -Path $env:BUILD_BINARIESDIRECTORY
 
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 Invoke-WebRequest -Uri https://cygwin.com/setup-x86_64.exe -Proxy $env:AGENT_PROXYURL -OutFile setup-x86_64.exe
 
 .\setup-x86_64.exe --version | Out-Default

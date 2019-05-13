@@ -5,6 +5,7 @@ Set-Location -Path $cygroot
 
 # keep fork working even across replaced binaries
 .\bin\mkdir.exe --mode=a=rwxt /var/run/cygfork
+.\bin\uname.exe -a
 .\bin\bash.exe --noprofile --norc -c 'declare -p > agentenv.dump'
 
 # VSTS git does checkout in text mode, need to map into cygwin world

@@ -53,8 +53,8 @@ jobs:
       condition: always()
     - task: PublishPipelineArtifact@0
       inputs:
-        artifactName: 'x86_64-pc-cygwin$(cygwin_version)w$(server_version)/cygwin-prefix.out'
-        targetPath: $(BUILD.SOURCESDIRECTORY)/cygwin-prefix.out
+        artifactName: 'x86_64-pc-cygwin$(cygwin_version)w$(server_version)/sources'
+        targetPath: $(BUILD.SOURCESDIRECTORY)
       condition: always()
 
   - job: "MacOS"

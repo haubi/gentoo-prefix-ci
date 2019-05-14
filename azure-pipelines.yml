@@ -50,8 +50,14 @@ jobs:
 
   - job: "MacOS"
     timeoutInMinutes: 0
+    strategy:
+      matrix:
+        current:
+          macOS_version: 'macOS'
+        highSierra:
+          macOS_version: 'macOS High Sierra'
     pool:
-      vmImage: 'macOS-10.13'
+      name: 'Hosted $(macOS_version)'
     steps:
     - script: set
       displayName: 'MacOS Info'

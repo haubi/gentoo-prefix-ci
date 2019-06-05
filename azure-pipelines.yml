@@ -12,12 +12,21 @@ jobs:
         v3_win2012r2:
           server_version: '2012'
           cygwin_version: 3
+        snap_win2012r2:
+          server_version: '2012'
+          cygwin_version: snap
         v3_win2016:
           server_version: '2016'
           cygwin_version: 3
+        snap_win2016:
+          server_version: '2016'
+          cygwin_version: snap
         v3_win2019:
           server_version: '2019'
           cygwin_version: 3
+        snap_win2019:
+          server_version: '2019'
+          cygwin_version: snap
     pool:
       name: 'Provided Windows $(server_version)'
     steps:

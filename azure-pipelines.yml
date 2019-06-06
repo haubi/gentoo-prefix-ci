@@ -12,18 +12,18 @@ jobs:
         v3_win2012r2:
           server_version: '2012'
           cygwin_version: 3
-        snap_win2012r2:
-          server_version: '2012'
-          cygwin_version: snap
         v3_win2016:
           server_version: '2016'
           cygwin_version: 3
-        snap_win2016:
-          server_version: '2016'
-          cygwin_version: snap
         v3_win2019:
           server_version: '2019'
           cygwin_version: 3
+        snap_win2012r2:
+          server_version: '2012'
+          cygwin_version: snap
+        snap_win2016:
+          server_version: '2016'
+          cygwin_version: snap
         snap_win2019:
           server_version: '2019'
           cygwin_version: snap
@@ -82,62 +82,62 @@ jobs:
           docker_os: fedora
           prefix_rap: no
           prefix_32bit: no
+        fedora28:
+          docker_os: fedora28
+          prefix_rap: no
+          prefix_32bit: no
+        opensuse:
+          docker_os: opensuse
+          prefix_rap: no
+          prefix_32bit: no
         fedora_x86:
           docker_os: fedora
+          prefix_rap: no
+          prefix_32bit: yes
+        fedora28_x86:
+          docker_os: fedora28
+          prefix_rap: no
+          prefix_32bit: yes
+        opensuse_x86:
+          docker_os: opensuse
           prefix_rap: no
           prefix_32bit: yes
         fedora_rap:
           docker_os: fedora
           prefix_rap: yes
           prefix_32bit: no
-        fedora_rap_x86:
-          docker_os: fedora
-          prefix_rap: yes
-          prefix_32bit: yes
-        fedora28:
-          docker_os: fedora28
-          prefix_rap: no
-          prefix_32bit: no
-        fedora28_x86:
-          docker_os: fedora28
-          prefix_rap: no
-          prefix_32bit: yes
         fedora28_rap:
           docker_os: fedora28
           prefix_rap: yes
           prefix_32bit: no
-        fedora28_rap_x86:
-          docker_os: fedora28
-          prefix_rap: yes
-          prefix_32bit: yes
-        opensuse:
-          docker_os: opensuse
-          prefix_rap: no
-          prefix_32bit: no
-        opensuse_x86:
-          docker_os: opensuse
-          prefix_rap: no
-          prefix_32bit: yes
         opensuse_rap:
           docker_os: opensuse
           prefix_rap: yes
           prefix_32bit: no
-        opensuse_rap_x86:
-          docker_os: opensuse
-          prefix_rap: yes
-          prefix_32bit: yes
         ubuntu_rap:
           docker_os: ubuntu
           prefix_rap: yes
           prefix_32bit: no
-        ubuntu_rap_x86:
-          docker_os: ubuntu
-          prefix_rap: yes
-          prefix_32bit: yes
         ubuntu16_rap:
           docker_os: ubuntu16
           prefix_rap: yes
           prefix_32bit: no
+        fedora_rap_x86:
+          docker_os: fedora
+          prefix_rap: yes
+          prefix_32bit: yes
+        fedora28_rap_x86:
+          docker_os: fedora28
+          prefix_rap: yes
+          prefix_32bit: yes
+        opensuse_rap_x86:
+          docker_os: opensuse
+          prefix_rap: yes
+          prefix_32bit: yes
+        ubuntu_rap_x86:
+          docker_os: ubuntu
+          prefix_rap: yes
+          prefix_32bit: yes
         ubuntu16_rap_x86:
           docker_os: ubuntu16
           prefix_rap: yes

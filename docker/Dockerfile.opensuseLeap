@@ -25,5 +25,3 @@ RUN set -x \
   ; pkgs="${pkgs} make" \
   ; zypper --non-interactive install ${pkgs} \
   ; date -u -R
-
-ENV SUDO_GROUP wheel

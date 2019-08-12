@@ -5,6 +5,7 @@
 RUN set -x \
   ; set -e \
   ; date -u -R \
+  ; cat /etc/group \
   ; useradd --user-group --create-home --groups ${SUDO_GROUP:-sudo} --shell=/bin/bash user \
   ; ls -la /home/user \
   ; ls -ld /etc/sudoers* \

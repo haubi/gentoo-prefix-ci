@@ -169,7 +169,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-16.04'
     steps:
-    - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; cat /etc/group; ls -l; pwd
+    - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
       displayName: 'Machine Info'
     - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
               | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=$(prefix_32bit) --rap=$(prefix_rap)" .

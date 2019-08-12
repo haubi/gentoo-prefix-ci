@@ -19,7 +19,6 @@ RUN set -x \
 	   esac \
   ; done \
   ; pkgs="${pkgs} wget" \
-  ; pkgs="${pkgs} sudo" \
   ; pkgs="${pkgs} libc6-dev-i386" \
   ; pkgs="${pkgs} make" \
   ; apt-get install -y ${pkgs} \

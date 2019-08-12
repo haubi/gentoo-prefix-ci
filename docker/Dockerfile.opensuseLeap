@@ -20,7 +20,6 @@ RUN set -x \
   ; done \
   ; pkgs="${pkgs} wget" \
   ; pkgs="${pkgs} tar" \
-  ; pkgs="${pkgs} sudo" \
   ; pkgs="${pkgs} glibc-devel-32bit" \
   ; pkgs="${pkgs} make" \
   ; zypper --non-interactive install ${pkgs} \

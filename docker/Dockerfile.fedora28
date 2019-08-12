@@ -23,10 +23,7 @@ RUN set -x \
 	   esac \
   ; done \
   ; pkgs="${pkgs} wget" \
-  ; pkgs="${pkgs} sudo" \
   ; pkgs="${pkgs} glibc-devel.i686" \
   ; pkgs="${pkgs} make" \
   ; dnf install -y ${pkgs} \
   ; date -u -R
-
-ENV SUDO_GROUP wheel

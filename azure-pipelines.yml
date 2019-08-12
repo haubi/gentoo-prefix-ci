@@ -86,8 +86,12 @@ jobs:
           docker_os: fedora28
           prefix_rap: no
           prefix_32bit: no
-        opensuse:
-          docker_os: opensuse
+        opensuseLeap:
+          docker_os: opensuseLeap
+          prefix_rap: no
+          prefix_32bit: no
+        opensuseTumbleweed:
+          docker_os: opensuseTumbleweed
           prefix_rap: no
           prefix_32bit: no
         fedora_x86:
@@ -98,8 +102,12 @@ jobs:
           docker_os: fedora28
           prefix_rap: no
           prefix_32bit: yes
-        opensuse_x86:
-          docker_os: opensuse
+        opensuseLeap_x86:
+          docker_os: opensuseLeap
+          prefix_rap: no
+          prefix_32bit: yes
+        opensuseTumbleweed_x86:
+          docker_os: opensuseTumbleweed
           prefix_rap: no
           prefix_32bit: yes
         fedora_rap:
@@ -110,8 +118,12 @@ jobs:
           docker_os: fedora28
           prefix_rap: yes
           prefix_32bit: no
-        opensuse_rap:
-          docker_os: opensuse
+        opensuseLeap_rap:
+          docker_os: opensuseLeap
+          prefix_rap: yes
+          prefix_32bit: no
+        opensuseTumbleweed_rap:
+          docker_os: opensuseTumbleweed
           prefix_rap: yes
           prefix_32bit: no
         ubuntu_rap:
@@ -130,8 +142,12 @@ jobs:
           docker_os: fedora28
           prefix_rap: yes
           prefix_32bit: yes
-        opensuse_rap_x86:
-          docker_os: opensuse
+        opensuseLeap_rap_x86:
+          docker_os: opensuseLeap
+          prefix_rap: yes
+          prefix_32bit: yes
+        opensuseTumbleweed_rap_x86:
+          docker_os: opensuseTumbleweed
           prefix_rap: yes
           prefix_32bit: yes
         ubuntu_rap_x86:

@@ -1,5 +1,5 @@
 
-FROM opensuse
+FROM opensuse/leap
 
 ARG BOOTSTRAP_OPTS
 

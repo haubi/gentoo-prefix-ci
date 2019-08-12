@@ -21,6 +21,7 @@ RUN set -x \
   ; pkgs="${pkgs} wget" \
   ; pkgs="${pkgs} tar" \
   ; pkgs="${pkgs} glibc-devel-32bit" \
+  ; pkgs="${pkgs} gzip" \
   ; pkgs="${pkgs} make" \
   ; zypper --non-interactive install ${pkgs} \
   ; date -u -R

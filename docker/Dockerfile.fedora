@@ -13,7 +13,9 @@ ARG BOOTSTRAP_OPTS
 # findutils        # stage1 findutils fails with https://bugs.gentoo.org/663242
 RUN set -x \
   ; set -e \
+  ; date -u -R \
   ; dnf check-update || : \
+  ; date -u -R \
   ; pkgs="gcc-c++.x86_64 libstdc++-devel.x86_64" \
   ; for arg in ${BOOTSTRAP_OPTS} \
   ; do case ${arg} in \
@@ -29,6 +31,6 @@ RUN set -x \
   ; pkgs="${pkgs} m4" \
   ; pkgs="${pkgs} findutils" \
   ; dnf install -y ${pkgs} \
-  ; :
+  ; date -u -R
 
 ENV SUDO_GROUP wheel

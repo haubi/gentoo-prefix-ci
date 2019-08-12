@@ -4,13 +4,14 @@
 # Give the user a password
 RUN set -x \
   ; set -e \
+  ; date -u -R \
   ; useradd --user-group --create-home --groups ${SUDO_GROUP:-sudo} --shell=/bin/bash user \
   ; ls -la /home/user \
   ; ls -ld /etc/sudoers* \
   ; ls -l /etc/sudoers.d \
   ; cat /etc/group \
   ; echo user:user | chpasswd \
-  ; :
+  ; date -u -R
 
 WORKDIR /home/user
 USER user

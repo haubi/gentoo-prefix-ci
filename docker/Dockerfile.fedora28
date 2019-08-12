@@ -11,7 +11,9 @@ ARG BOOTSTRAP_OPTS
 # make             # stage1 make fails with https://bugs.gentoo.org/646558
 RUN set -x \
   ; set -e \
+  ; date -u -R \
   ; dnf check-update || : \
+  ; date -u -R \
   ; pkgs="gcc-c++.x86_64 libstdc++-devel.x86_64" \
   ; for arg in ${BOOTSTRAP_OPTS} \
   ; do case ${arg} in \
@@ -25,6 +27,6 @@ RUN set -x \
   ; pkgs="${pkgs} glibc-devel.i686" \
   ; pkgs="${pkgs} make" \
   ; dnf install -y ${pkgs} \
-  ; :
+  ; date -u -R
 
 ENV SUDO_GROUP wheel

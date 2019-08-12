@@ -8,7 +8,9 @@ COPY . ./sources
 RUN set -x \
   ; set -e \
   ; printenv \
+  ; date -u -R \
   ; wget -O ./bootstrap-prefix.sh https://gitweb.gentoo.org/repo/proj/prefix.git/plain/scripts/bootstrap-prefix.sh \
+  ; date -u -R \
   ; chmod +x ./bootstrap-prefix.sh \
   ; "$(pwd)"/sources/prefix/perform-bootstrap.sh \
 	--bootstrap-prefix-sh="$(pwd)"/bootstrap-prefix.sh \
@@ -20,4 +22,4 @@ RUN set -x \
 	--rap=no \
 	--force-32bit=no \
 	${BOOTSTRAP_OPTS} \
-  ; :
+  ; date -u -R

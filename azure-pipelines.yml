@@ -3,14 +3,16 @@
 # Add steps that use Docker Compose, tag images, push to a registry, run an image, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
+# do not build anything just because we commit to the pipeline
 trigger:
   branches:
     exclude:
     - '*'
 
+# instead, perform scheduled builds only (plus manually queued ones)
 schedules:
-  - cron: "0 8 * * Tue"
-    displayName: Weekly Tuesdaily build
+  - cron: "0 4 * * Sat"
+    displayName: Weekly Saturday build
     branches:
       include:
         - master

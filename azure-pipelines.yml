@@ -9,8 +9,8 @@ trigger:
     - '*'
 
 schedules:
-  - cron: "0 4 * * Sat"
-    displayName: Weekly Saturday build
+  - cron: "0 8 * * Tue"
+    displayName: Weekly Tuesdaily build
     branches:
       include:
         - master

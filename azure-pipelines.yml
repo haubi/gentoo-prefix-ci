@@ -18,167 +18,175 @@ schedules:
         - master
     always: true
 
-# Everything must be under a 'job' to be able to set the timeoutInMinutes
-jobs:
-  - job: "Cygwin"
-    timeoutInMinutes: 0
-    strategy:
-      matrix:
-        v3_win2012r2:
-          server_version: '2012'
-          cygwin_version: 3
-        v3_win2016:
-          server_version: '2016'
-          cygwin_version: 3
-        v3_win2019:
-          server_version: '2019'
-          cygwin_version: 3
-        snap_win2012r2:
-          server_version: '2012'
-          cygwin_version: snap
-        snap_win2016:
-          server_version: '2016'
-          cygwin_version: snap
-        snap_win2019:
-          server_version: '2019'
-          cygwin_version: snap
-    pool:
-      name: 'Provided Windows $(server_version)'
-    steps:
-    - powershell: Get-ChildItem 'Env:' | Tee-Object agent-env.out
-      displayName: 'Agent Info'
-    - powershell: PowerShell -File cygwin/setupv$(cygwin_version).ps1 2>&1 > cygwin-setup.out
-      timeoutInMinutes: 0
-      displayName: 'perform Cygwin v$(cygwin_version) Setup'
-    - powershell: Get-Content cygwin-setup.out
-      timeoutInMinutes: 0
-      condition: always()
-      displayName: 'show Cygwin v$(cygwin_version) Setup'
-    - powershell: PowerShell -File cygwin/prefix.ps1 2>&1 > cygwin-prefix.out
-      timeoutInMinutes: 0
-      displayName: 'perform Gentoo Prefix bootstrap'
-    - powershell: Get-Content cygwin-prefix.out
-      timeoutInMinutes: 0
-      condition: always()
-      displayName: 'show Gentoo Prefix bootstrap'
-    - task: PublishPipelineArtifact@0
-      inputs:
-        artifactName: 'x86_64-pc-cygwin$(cygwin_version)w$(server_version)/gentoo-prefix'
-        targetPath: $(BUILD.STAGINGDIRECTORY)/gentoo-prefix
-      condition: always()
-    - task: PublishPipelineArtifact@0
-      inputs:
-        artifactName: 'x86_64-pc-cygwin$(cygwin_version)w$(server_version)/sources'
-        targetPath: $(BUILD.SOURCESDIRECTORY)
-      condition: always()
+stages:
+  - stage: "Cygwin"
+    dependsOn: []
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            v3_win2012r2:
+              server_version: '2012'
+              cygwin_version: 3
+            v3_win2016:
+              server_version: '2016'
+              cygwin_version: 3
+            v3_win2019:
+              server_version: '2019'
+              cygwin_version: 3
+            snap_win2012r2:
+              server_version: '2012'
+              cygwin_version: snap
+            snap_win2016:
+              server_version: '2016'
+              cygwin_version: snap
+            snap_win2019:
+              server_version: '2019'
+              cygwin_version: snap
+        pool:
+          name: 'Provided Windows $(server_version)'
+        steps:
+        - powershell: Get-ChildItem 'Env:' | Tee-Object agent-env.out
+          displayName: 'Agent Info'
+        - powershell: PowerShell -File cygwin/setupv$(cygwin_version).ps1 2>&1 > cygwin-setup.out
+          timeoutInMinutes: 0
+          displayName: 'perform Cygwin v$(cygwin_version) Setup'
+        - powershell: Get-Content cygwin-setup.out
+          timeoutInMinutes: 0
+          condition: always()
+          displayName: 'show Cygwin v$(cygwin_version) Setup'
+        - powershell: PowerShell -File cygwin/prefix.ps1 2>&1 > cygwin-prefix.out
+          timeoutInMinutes: 0
+          displayName: 'perform Gentoo Prefix bootstrap'
+        - powershell: Get-Content cygwin-prefix.out
+          timeoutInMinutes: 0
+          condition: always()
+          displayName: 'show Gentoo Prefix bootstrap'
+        - task: PublishPipelineArtifact@0
+          inputs:
+            artifactName: 'x86_64-pc-cygwin$(cygwin_version)w$(server_version)/gentoo-prefix'
+            targetPath: $(BUILD.STAGINGDIRECTORY)/gentoo-prefix
+          condition: always()
+        - task: PublishPipelineArtifact@0
+          inputs:
+            artifactName: 'x86_64-pc-cygwin$(cygwin_version)w$(server_version)/sources'
+            targetPath: $(BUILD.SOURCESDIRECTORY)
+          condition: always()
 
-  - job: "MacOS"
-    timeoutInMinutes: 0
-    strategy:
-      matrix:
-        current:
-          macOS_version: 'macOS'
-        highSierra:
-          macOS_version: 'macOS High Sierra'
-    pool:
-      name: 'Hosted $(macOS_version)'
-    steps:
-    - script: set
-      displayName: 'MacOS Info'
-    - script: ./macos/prefix.sh
-      timeoutInMinutes: 0
-      displayName: 'MacOS Prefix'
+  - stage: "MacOS"
+    dependsOn: []
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            current:
+              macOS_version: 'macOS'
+            highSierra:
+              macOS_version: 'macOS High Sierra'
+        pool:
+          name: 'Hosted $(macOS_version)'
+        steps:
+        - script: set
+          displayName: 'MacOS Info'
+        - script: ./macos/prefix.sh
+          timeoutInMinutes: 0
+          displayName: 'MacOS Prefix'
 
-  - job: "Linux"
-    timeoutInMinutes: 0
-    strategy:
-      matrix:
-        fedora:
-          docker_os: fedora
-          prefix_rap: no
-          prefix_32bit: no
-        fedora28:
-          docker_os: fedora28
-          prefix_rap: no
-          prefix_32bit: no
-        opensuseLeap:
-          docker_os: opensuseLeap
-          prefix_rap: no
-          prefix_32bit: no
-        opensuseTumbleweed:
-          docker_os: opensuseTumbleweed
-          prefix_rap: no
-          prefix_32bit: no
-        fedora_x86:
-          docker_os: fedora
-          prefix_rap: no
-          prefix_32bit: yes
-        fedora28_x86:
-          docker_os: fedora28
-          prefix_rap: no
-          prefix_32bit: yes
-        opensuseLeap_x86:
-          docker_os: opensuseLeap
-          prefix_rap: no
-          prefix_32bit: yes
-        opensuseTumbleweed_x86:
-          docker_os: opensuseTumbleweed
-          prefix_rap: no
-          prefix_32bit: yes
-        fedora_rap:
-          docker_os: fedora
-          prefix_rap: yes
-          prefix_32bit: no
-        fedora28_rap:
-          docker_os: fedora28
-          prefix_rap: yes
-          prefix_32bit: no
-        opensuseLeap_rap:
-          docker_os: opensuseLeap
-          prefix_rap: yes
-          prefix_32bit: no
-        opensuseTumbleweed_rap:
-          docker_os: opensuseTumbleweed
-          prefix_rap: yes
-          prefix_32bit: no
-        ubuntu_rap:
-          docker_os: ubuntu
-          prefix_rap: yes
-          prefix_32bit: no
-        ubuntu16_rap:
-          docker_os: ubuntu16
-          prefix_rap: yes
-          prefix_32bit: no
-        fedora_rap_x86:
-          docker_os: fedora
-          prefix_rap: yes
-          prefix_32bit: yes
-        fedora28_rap_x86:
-          docker_os: fedora28
-          prefix_rap: yes
-          prefix_32bit: yes
-        opensuseLeap_rap_x86:
-          docker_os: opensuseLeap
-          prefix_rap: yes
-          prefix_32bit: yes
-        opensuseTumbleweed_rap_x86:
-          docker_os: opensuseTumbleweed
-          prefix_rap: yes
-          prefix_32bit: yes
-        ubuntu_rap_x86:
-          docker_os: ubuntu
-          prefix_rap: yes
-          prefix_32bit: yes
-        ubuntu16_rap_x86:
-          docker_os: ubuntu16
-          prefix_rap: yes
-          prefix_32bit: yes
-    pool:
-      vmImage: 'ubuntu-16.04'
-    steps:
-    - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
-      displayName: 'Machine Info'
-    - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
-              | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=$(prefix_32bit) --rap=$(prefix_rap)" .
-      displayName: '$(docker_os) force-32bit=$(prefix_32bit) rap=$(prefix_rap) Prefix'
-      timeoutInMinutes: 0
+  - stage: "Linux"
+    dependsOn: []
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            fedora:
+              docker_os: fedora
+              prefix_rap: no
+              prefix_32bit: no
+            fedora28:
+              docker_os: fedora28
+              prefix_rap: no
+              prefix_32bit: no
+            opensuseLeap:
+              docker_os: opensuseLeap
+              prefix_rap: no
+              prefix_32bit: no
+            opensuseTumbleweed:
+              docker_os: opensuseTumbleweed
+              prefix_rap: no
+              prefix_32bit: no
+            fedora_x86:
+              docker_os: fedora
+              prefix_rap: no
+              prefix_32bit: yes
+            fedora28_x86:
+              docker_os: fedora28
+              prefix_rap: no
+              prefix_32bit: yes
+            opensuseLeap_x86:
+              docker_os: opensuseLeap
+              prefix_rap: no
+              prefix_32bit: yes
+            opensuseTumbleweed_x86:
+              docker_os: opensuseTumbleweed
+              prefix_rap: no
+              prefix_32bit: yes
+            fedora_rap:
+              docker_os: fedora
+              prefix_rap: yes
+              prefix_32bit: no
+            fedora28_rap:
+              docker_os: fedora28
+              prefix_rap: yes
+              prefix_32bit: no
+            opensuseLeap_rap:
+              docker_os: opensuseLeap
+              prefix_rap: yes
+              prefix_32bit: no
+            opensuseTumbleweed_rap:
+              docker_os: opensuseTumbleweed
+              prefix_rap: yes
+              prefix_32bit: no
+            ubuntu_rap:
+              docker_os: ubuntu
+              prefix_rap: yes
+              prefix_32bit: no
+            ubuntu16_rap:
+              docker_os: ubuntu16
+              prefix_rap: yes
+              prefix_32bit: no
+            fedora_rap_x86:
+              docker_os: fedora
+              prefix_rap: yes
+              prefix_32bit: yes
+            fedora28_rap_x86:
+              docker_os: fedora28
+              prefix_rap: yes
+              prefix_32bit: yes
+            opensuseLeap_rap_x86:
+              docker_os: opensuseLeap
+              prefix_rap: yes
+              prefix_32bit: yes
+            opensuseTumbleweed_rap_x86:
+              docker_os: opensuseTumbleweed
+              prefix_rap: yes
+              prefix_32bit: yes
+            ubuntu_rap_x86:
+              docker_os: ubuntu
+              prefix_rap: yes
+              prefix_32bit: yes
+            ubuntu16_rap_x86:
+              docker_os: ubuntu16
+              prefix_rap: yes
+              prefix_32bit: yes
+        pool:
+          vmImage: 'ubuntu-16.04'
+        steps:
+        - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
+          displayName: 'Machine Info'
+        - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
+                  | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=$(prefix_32bit) --rap=$(prefix_rap)" .
+          displayName: '$(docker_os) force-32bit=$(prefix_32bit) rap=$(prefix_rap) Prefix'
+          timeoutInMinutes: 0

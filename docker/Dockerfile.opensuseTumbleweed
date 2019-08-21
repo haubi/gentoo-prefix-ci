@@ -23,5 +23,6 @@ RUN set -x \
   ; pkgs="${pkgs} glibc-devel-32bit" \
   ; pkgs="${pkgs} gzip" \
   ; pkgs="${pkgs} make" \
+  ; pkgs="${pkgs} shadow" \
   ; zypper --non-interactive install ${pkgs} \
   ; date -u -R

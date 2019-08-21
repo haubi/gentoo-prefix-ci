@@ -94,7 +94,7 @@ stages:
           timeoutInMinutes: 0
           displayName: 'MacOS Prefix'
 
-  - stage: "Linux"
+  - stage: "Guest"
     dependsOn: []
     jobs:
       - job: "Prefix"
@@ -103,90 +103,101 @@ stages:
           matrix:
             fedora:
               docker_os: fedora
-              prefix_rap: no
-              prefix_32bit: no
             fedora28:
               docker_os: fedora28
-              prefix_rap: no
-              prefix_32bit: no
             opensuseLeap:
               docker_os: opensuseLeap
-              prefix_rap: no
-              prefix_32bit: no
             opensuseTumbleweed:
               docker_os: opensuseTumbleweed
-              prefix_rap: no
-              prefix_32bit: no
-            fedora_x86:
-              docker_os: fedora
-              prefix_rap: no
-              prefix_32bit: yes
-            fedora28_x86:
-              docker_os: fedora28
-              prefix_rap: no
-              prefix_32bit: yes
-            opensuseLeap_x86:
-              docker_os: opensuseLeap
-              prefix_rap: no
-              prefix_32bit: yes
-            opensuseTumbleweed_x86:
-              docker_os: opensuseTumbleweed
-              prefix_rap: no
-              prefix_32bit: yes
-            fedora_rap:
-              docker_os: fedora
-              prefix_rap: yes
-              prefix_32bit: no
-            fedora28_rap:
-              docker_os: fedora28
-              prefix_rap: yes
-              prefix_32bit: no
-            opensuseLeap_rap:
-              docker_os: opensuseLeap
-              prefix_rap: yes
-              prefix_32bit: no
-            opensuseTumbleweed_rap:
-              docker_os: opensuseTumbleweed
-              prefix_rap: yes
-              prefix_32bit: no
-            ubuntu_rap:
-              docker_os: ubuntu
-              prefix_rap: yes
-              prefix_32bit: no
-            ubuntu16_rap:
-              docker_os: ubuntu16
-              prefix_rap: yes
-              prefix_32bit: no
-            fedora_rap_x86:
-              docker_os: fedora
-              prefix_rap: yes
-              prefix_32bit: yes
-            fedora28_rap_x86:
-              docker_os: fedora28
-              prefix_rap: yes
-              prefix_32bit: yes
-            opensuseLeap_rap_x86:
-              docker_os: opensuseLeap
-              prefix_rap: yes
-              prefix_32bit: yes
-            opensuseTumbleweed_rap_x86:
-              docker_os: opensuseTumbleweed
-              prefix_rap: yes
-              prefix_32bit: yes
-            ubuntu_rap_x86:
-              docker_os: ubuntu
-              prefix_rap: yes
-              prefix_32bit: yes
-            ubuntu16_rap_x86:
-              docker_os: ubuntu16
-              prefix_rap: yes
-              prefix_32bit: yes
         pool:
           vmImage: 'ubuntu-16.04'
         steps:
         - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
           displayName: 'Machine Info'
         - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
-                  | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=$(prefix_32bit) --rap=$(prefix_rap)" .
-          displayName: '$(docker_os) force-32bit=$(prefix_32bit) rap=$(prefix_rap) Prefix'
+                  | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=no --rap=no" .
+          displayName: '$(docker_os) Prefix Guest'
+          timeoutInMinutes: 0
+
+  - stage: "Guest_32bit"
+    dependsOn: []
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            fedora:
+              docker_os: fedora
+            fedora28:
+              docker_os: fedora28
+            opensuseLeap:
+              docker_os: opensuseLeap
+            opensuseTumbleweed:
+              docker_os: opensuseTumbleweed
+        pool:
+          vmImage: 'ubuntu-16.04'
+        steps:
+        - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
+          displayName: 'Machine Info'
+        - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
+                  | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=yes --rap=no" .
+          displayName: '$(docker_os) Prefix Guest 32bit'
+          timeoutInMinutes: 0
+
+  - stage: "RAP"
+    dependsOn: []
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            fedora:
+              docker_os: fedora
+            fedora28:
+              docker_os: fedora28
+            opensuseTumbleweed:
+              docker_os: opensuseTumbleweed
+            opensuseLeap:
+              docker_os: opensuseLeap
+            ubuntu:
+              docker_os: ubuntu
+            ubuntu16:
+              docker_os: ubuntu16
+        pool:
+          vmImage: 'ubuntu-16.04'
+        steps:
+        - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
+          displayName: 'Machine Info'
+        - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
+                  | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=no --rap=yes" .
+          displayName: '$(docker_os) Prefix RAP'
+          timeoutInMinutes: 0
+
+  - stage: "RAP_32bit"
+    dependsOn: []
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            fedora:
+              docker_os: fedora
+            fedora28:
+              docker_os: fedora28
+            opensuseTumbleweed:
+              docker_os: opensuseTumbleweed
+            opensuseLeap:
+              docker_os: opensuseLeap
+            ubuntu:
+              docker_os: ubuntu
+            ubuntu16:
+              docker_os: ubuntu16
+        pool:
+          vmImage: 'ubuntu-16.04'
+        steps:
+        - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
+          displayName: 'Machine Info'
+        - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
+                  | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=yes --rap=yes" .
+          displayName: '$(docker_os) Prefix RAP 32bit'
           timeoutInMinutes: 0

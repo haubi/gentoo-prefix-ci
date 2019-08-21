@@ -2,6 +2,7 @@
 # Create user
 # Give the user a password
 RUN set -x \
+  ; cat /etc/*-release \
   ; set -e \
   ; date -u -R \
   ; cat /etc/group \

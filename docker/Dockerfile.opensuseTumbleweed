@@ -24,5 +24,6 @@ RUN set -x \
   ; pkgs="${pkgs} gzip" \
   ; pkgs="${pkgs} make" \
   ; pkgs="${pkgs} shadow" \
+  ; pkgs="${pkgs} util-linux" \
   ; zypper --non-interactive install ${pkgs} \
   ; date -u -R

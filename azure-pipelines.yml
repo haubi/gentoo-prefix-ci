@@ -15,7 +15,7 @@ schedules:
     displayName: Weekly Saturday build
     branches:
       include:
-        - master
+      - master
     always: true
 
 stages:

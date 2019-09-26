@@ -4,8 +4,6 @@ if ( ! $env:BUILD_BINARIESDIRECTORY ) { exit 1 }
 
 if ( ! $env:BUILD_ARTIFACTSTAGINGDIRECTORY ) { exit 1 }
 
-if ( ! $env:BUILD_BINARIESDIRECTORY ) { exit 1 }
-
 Set-Location -Path $env:BUILD_BINARIESDIRECTORY
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -18,8 +16,9 @@ if ( $env:AGENT_PROXYURL ) {
   $cmds += ' -Proxy $env:AGENT_PROXYURL'
 }
 
-echo "$cmds" | Out-Default
-Invoke-Expression "$cmds" | Out-Default
+$cmds += ' | Out-Default'
+echo "$cmds"
+Invoke-Expression "$cmds"
 
 .\setup-x86_64.exe --version | Out-Default
 
@@ -45,8 +44,9 @@ $cmds += ' --upgrade-also'
 $cmds += ' --verbose'
 $cmds += ' --packages "wget,gcc-g++,rsync"'
 
-echo "$cmds" | Out-Default
-Invoke-Expression "$cmds" | Out-Default
+$cmds += ' | Out-Default'
+echo "$cmds"
+Invoke-Expression "$cmds"
 
 $cmds = 'Invoke-WebRequest'
 $cmds += ' -UseBasicParsing'
@@ -56,5 +56,6 @@ if ( $env:AGENT_PROXYURL ) {
   $cmds += ' -Proxy $env:AGENT_PROXYURL'
 }
 
-echo "$cmds" | Out-Default
-Invoke-Expression "$cmds" | Out-Default
+$cmds += ' | Out-Default'
+echo "$cmds"
+Invoke-Expression "$cmds"

@@ -1,9 +1,7 @@
 
 if ( ! $env:BUILD_ARTIFACTSTAGINGDIRECTORY ) { exit 1 }
 
-if ( ! $env:AGENT_PROXYURL ) { exit 1 }
-
-Invoke-Expression -Command ${PSScriptRoot}/setupv3.ps1
+Invoke-Expression -Command ${PSScriptRoot}/setupv3.ps1 | Out-Default
 
 Set-Location -Path "$env:BUILD_ARTIFACTSTAGINGDIRECTORY"
 

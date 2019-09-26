@@ -164,7 +164,7 @@ stages:
             ubuntu16:
               docker_os: ubuntu16
         pool:
-          vmImage: 'ubuntu-16.04'
+          name: 'Provided Ubuntu 18'
         steps:
         - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
           displayName: 'Machine Info'

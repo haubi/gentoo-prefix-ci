@@ -11,6 +11,7 @@ ARG BOOTSTRAP_OPTS
 # make             # stage1 make fails with https://bugs.gentoo.org/646558
 # m4               # stage1 m4 fails with https://bugs.gentoo.org/663924
 # findutils        # stage1 findutils fails with https://bugs.gentoo.org/663242
+# rsync            # stage3 linux headers require rsync for header install
 RUN set -x \
   ; set -e \
   ; date -u -R \
@@ -29,5 +30,6 @@ RUN set -x \
   ; pkgs="${pkgs} make" \
   ; pkgs="${pkgs} m4" \
   ; pkgs="${pkgs} findutils" \
+  ; pkgs="${pkgs} rsync" \
   ; dnf install -y ${pkgs} \
   ; date -u -R

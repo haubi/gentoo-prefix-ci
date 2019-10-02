@@ -5,6 +5,7 @@ ARG BOOTSTRAP_OPTS
 
 # glibc-devel-32bit # python does look for /usr/lib/libcrypt.so file only
 # make              # stage1 make fails with https://bugs.gentoo.org/646558
+# rsync             # stage3 linux headers require rsync for header install
 RUN set -x \
   ; set -e \
   ; date -u -R \
@@ -23,6 +24,7 @@ RUN set -x \
   ; pkgs="${pkgs} glibc-devel-32bit" \
   ; pkgs="${pkgs} gzip" \
   ; pkgs="${pkgs} make" \
+  ; pkgs="${pkgs} rsync" \
   ; pkgs="${pkgs} shadow" \
   ; pkgs="${pkgs} util-linux" \
   ; zypper --non-interactive install ${pkgs} \

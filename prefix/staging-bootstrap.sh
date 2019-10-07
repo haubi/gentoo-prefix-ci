@@ -20,6 +20,7 @@ STAGING=
 UPLOAD_RESULTS=no
 GENTOO_MIRRORS=
 GENTOO_DISTDIR=
+USE_CPU_CORES=
 
 for arg in "$@"
 do
@@ -30,6 +31,7 @@ do
 	--upload-results=no) UPLOAD_RESULTS=no ;;
 	--gentoo-mirrors=*) GENTOO_MIRRORS="${arg#--gentoo-mirrors=}" ;;
 	--gentoo-distdir=*) GENTOO_DISTDIR="${arg#--gentoo-distdir=}" ;;
+	--use-cpu-cores=*) USE_CPU_CORES="${arg#--use-cpu-cores=}" ;;
 	esac
 done
 
@@ -59,4 +61,5 @@ chmod +x ./bootstrap-prefix.sh
 	--proxy="${AGENT_PROXYURL}" \
 	--gentoo-mirrors="${GENTOO_MIRRORS}" \
 	--gentoo-distdir="${GENTOO_DISTDIR}" \
+	${USE_CPU_CORES:+--use-cpu-cores=${USE_CPU_CORES}} \
 	--upload-results=${UPLOAD_RESULTS}

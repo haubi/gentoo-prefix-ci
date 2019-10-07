@@ -28,6 +28,7 @@ default-settings() {
 	unset GENTOO_MIRRORS
 	unset DISTDIR
 	unset LATEST_TREE_YES TESTING_PV
+	unset USE_CPU_CORES
 	unset ftp_proxy http_proxy https_proxy RSYNC_PROXY 
 }
 
@@ -94,6 +95,9 @@ decode-settings() {
 			;;
 		--gentoo-distdir=*)
 			export DISTDIR=${arg#--gentoo-distdir=}
+			;;
+		--use-cpu-cores=*)
+			export USE_CPU_CORES=${arg#--use-cpu-cores=}
 			;;
 		esac
 	done

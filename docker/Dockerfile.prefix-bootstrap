@@ -12,6 +12,8 @@ RUN set -x \
   ; wget -O ./bootstrap-prefix.sh https://gitweb.gentoo.org/repo/proj/prefix.git/plain/scripts/bootstrap-prefix.sh \
   ; date -u -R \
   ; chmod +x ./bootstrap-prefix.sh \
+  ; usecpucores=$(grep processor /proc/cpuinfo | wc -l) \
+  ; (( ${usecpucores} >= 2 )) || usecpucores=2 \
   ; "$(pwd)"/sources/prefix/perform-bootstrap.sh \
 	--bootstrap-prefix-sh="$(pwd)"/bootstrap-prefix.sh \
 	--prefix=/tmp/gentoo \
@@ -21,5 +23,6 @@ RUN set -x \
 	--proxy="${AGENT_PROXYURL}" \
 	--rap=no \
 	--force-32bit=no \
+	--use-cpu-cores=${usecpucores} \
 	${BOOTSTRAP_OPTS} \
   ; date -u -R

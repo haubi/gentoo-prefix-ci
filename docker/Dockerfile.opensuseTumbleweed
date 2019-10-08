@@ -5,6 +5,7 @@ ARG BOOTSTRAP_OPTS
 
 # glibc-devel-32bit # python does look for /usr/lib/libcrypt.so file only
 # make              # stage1 make fails with https://bugs.gentoo.org/646558
+# m4                # stage1 m4-1.4.18 fails with "Please port gnulib freadahead.c to your platform!"
 # rsync             # stage3 linux headers require rsync for header install
 RUN set -x \
   ; set -e \
@@ -25,6 +26,7 @@ RUN set -x \
   ; pkgs="${pkgs} gzip" \
   ; pkgs="${pkgs} make" \
   ; pkgs="${pkgs} rsync" \
+  ; pkgs="${pkgs} m4" \
   ; pkgs="${pkgs} shadow" \
   ; pkgs="${pkgs} util-linux" \
   ; zypper --non-interactive install ${pkgs} \

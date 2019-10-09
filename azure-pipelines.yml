@@ -166,7 +166,15 @@ stages:
         pool:
           name: 'Provided Ubuntu 18'
         steps:
-        - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd; docker container prune -f
+        - script: uname -a;
+                  cat /proc/cpuinfo;
+                  cat /proc/meminfo;
+                  declare -p;
+                  cat /etc/*-release;
+                  ls -l;
+                  pwd;
+                  docker container prune -f;
+                  docker images -q | xargs docker rmi
           displayName: 'Machine Info'
         - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
                   | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=no --rap=yes" .
@@ -195,7 +203,15 @@ stages:
         pool:
           name: 'Provided Ubuntu 18'
         steps:
-        - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd; docker container prune -f
+        - script: uname -a;
+                  cat /proc/cpuinfo;
+                  cat /proc/meminfo;
+                  declare -p;
+                  cat /etc/*-release;
+                  ls -l;
+                  pwd;
+                  docker container prune -f;
+                  docker images -q | xargs docker rmi
           displayName: 'Machine Info'
         - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
                   | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=yes --rap=yes" .

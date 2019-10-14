@@ -173,8 +173,8 @@ stages:
                   cat /etc/*-release;
                   ls -l;
                   pwd;
-                  docker container prune -f;
-                  docker images -q | xargs docker rmi
+                  docker container prune -f || :;
+                  docker images -q | xargs docker rmi || :;
           displayName: 'Machine Info'
         - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
                   | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=no --rap=yes" .
@@ -210,8 +210,8 @@ stages:
                   cat /etc/*-release;
                   ls -l;
                   pwd;
-                  docker container prune -f;
-                  docker images -q | xargs docker rmi
+                  docker container prune -f || :;
+                  docker images -q | xargs docker rmi || :;
           displayName: 'Machine Info'
         - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
                   | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=yes --rap=yes" .

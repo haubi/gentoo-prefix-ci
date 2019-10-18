@@ -9,10 +9,10 @@ trigger:
     exclude:
     - '*'
 
-# instead, perform scheduled builds only (plus manually queued ones)
+# instead, perform scheduled builds only (besides manually queued ones)
 schedules:
-  - cron: "0 4 * * Sat"
-    displayName: Weekly Saturday build
+  - cron: "0 12 * * Fri"
+    displayName: Weekly Friday build
     branches:
       include:
       - master

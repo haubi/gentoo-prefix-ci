@@ -11,8 +11,8 @@ trigger:
 
 # instead, perform scheduled builds only (besides manually queued ones)
 schedules:
-  - cron: "0 12 * * Fri"
-    displayName: Weekly Friday build
+  - cron: "0 12 * * 1"
+    displayName: Weekly build
     branches:
       include:
       - master

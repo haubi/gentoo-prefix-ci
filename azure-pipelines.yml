@@ -26,12 +26,6 @@ stages:
         timeoutInMinutes: 0
         strategy:
           matrix:
-            v3_win2012r2:
-              server_version: '2012'
-              cygwin_version: 3
-            v3_win2016:
-              server_version: '2016'
-              cygwin_version: 3
             v3_win2019:
               server_version: '2019'
               cygwin_version: 3

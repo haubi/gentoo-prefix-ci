@@ -47,15 +47,3 @@ $cmds += ' --packages "wget,gcc-g++,rsync"'
 $cmds += ' | Out-Default'
 echo "$cmds"
 Invoke-Expression "$cmds"
-
-$cmds = 'Invoke-WebRequest'
-$cmds += ' -UseBasicParsing'
-$cmds += ' -Uri https://dev.gentoo.org/~haubi/cygwin-gentoo/x86_64/cygwin-3.0.7-gentoo-r0/cygwin1.dll'
-$cmds += ' -OutFile "$env:BUILD_ARTIFACTSTAGINGDIRECTORY\bin\cygwin1.dll"'
-if ( $env:AGENT_PROXYURL ) {
-  $cmds += ' -Proxy $env:AGENT_PROXYURL'
-}
-
-$cmds += ' | Out-Default'
-echo "$cmds"
-Invoke-Expression "$cmds"

@@ -45,9 +45,11 @@ decode-settings() {
 			PREFIX=${arg#--prefix=}
 			;;
 		--rap=yes)
+			unset TREE_FROM_SRC
 			unset PREFIX_DISABLE_RAP
 			;;
 		--rap=no)
+			export TREE_FROM_SRC="rsync.prefix.bitzolder.nl::gentoo-portage-prefix"
 			export PREFIX_DISABLE_RAP=yes
 			;;
 		--resume=yes)

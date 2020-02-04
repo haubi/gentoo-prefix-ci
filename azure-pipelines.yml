@@ -99,8 +99,7 @@ stages:
         steps:
         - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
           displayName: 'Machine Info'
-        - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
-                  | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=no --rap=no" .
+        - script: ./docker/run-bootstrap.sh --docker-os=$(docker_os) --force-32bit=no --rap=no
           displayName: '$(docker_os) Prefix Guest'
           timeoutInMinutes: 0
 
@@ -124,8 +123,7 @@ stages:
         steps:
         - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
           displayName: 'Machine Info'
-        - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
-                  | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=yes --rap=no" .
+        - script: ./docker/run-bootstrap.sh --docker-os=$(docker_os) --force-32bit=yes --rap=no
           displayName: '$(docker_os) Prefix Guest 32bit'
           timeoutInMinutes: 0
 
@@ -158,11 +156,8 @@ stages:
                   cat /etc/*-release;
                   ls -l;
                   pwd;
-                  docker container prune -f || :;
-                  docker images -q | xargs docker rmi || :;
           displayName: 'Machine Info'
-        - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
-                  | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=no --rap=yes" .
+        - script: ./docker/run-bootstrap.sh --docker-cleanup --docker-os=$(docker_os) --force-32bit=no --rap=yes
           displayName: '$(docker_os) Prefix RAP'
           timeoutInMinutes: 0
 
@@ -195,10 +190,7 @@ stages:
                   cat /etc/*-release;
                   ls -l;
                   pwd;
-                  docker container prune -f || :;
-                  docker images -q | xargs docker rmi || :;
           displayName: 'Machine Info'
-        - script: cat docker/Dockerfile.{$(docker_os),linux-user,prefix-bootstrap,entrypoint}
-                  | docker build -f - --build-arg=BOOTSTRAP_OPTS="--force-32bit=yes --rap=yes" .
+        - script: ./docker/run-bootstrap.sh --docker-cleanup --docker-os=$(docker_os) --force-32bit=yes --rap=yes
           displayName: '$(docker_os) Prefix RAP 32bit'
           timeoutInMinutes: 0

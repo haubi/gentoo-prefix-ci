@@ -1,0 +1,8 @@
+
+ARG BOOTSTRAP_OPTS
+ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
+
+RUN mkdir -p ./sources
+COPY . ./sources
+
+ENTRYPOINT ["/bin/bash"]

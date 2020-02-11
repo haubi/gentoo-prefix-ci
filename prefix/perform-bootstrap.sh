@@ -27,9 +27,10 @@ default-settings() {
 	export PREFIX_DISABLE_RAP=yes
 	unset GENTOO_MIRRORS
 	unset DISTDIR
-	unset LATEST_TREE_YES TESTING_PV
+	unset LATEST_TREE_YES
+	unset TESTING_PV
 	unset USE_CPU_CORES
-	unset ftp_proxy http_proxy https_proxy RSYNC_PROXY 
+	TIMEOUT= # man timeout(1)
 }
 
 decode-settings() {
@@ -80,6 +81,9 @@ decode-settings() {
 			RSYNC_PROXY=${ftp_proxy#*://}
 			export ftp_proxy http_proxy https_proxy RSYNC_PROXY 
 			;;
+		--timeout=*)
+			TIMEOUT=${arg#--timeout=}
+			;;
 		--upload-results=yes)
 			UPLOAD_RESULTS=:
 			;;
@@ -110,14 +114,28 @@ validate-settings() {
 	[[ -r ${BOOTSTRAP_PREFIX_SH} ]] || die "cannot read bootstrap-prefix-sh ${BOOTSTRAP_PREFIX_SH}"
 	[[ ${PREFIX} ]] || die "missing --prefix argument"
 	[[ ! -r ${PREFIX}/stage1.log ]] || ${RESUME} || die "bootstrap was already started, not resuming ${PREFIX}"
+	[[ ! ${TIMEOUT} ]] || ! ${UPLOAD_RESULTS} || die "cannot combine --timeout with --upload-results=yes"
 }
 
 perform-bootstrap() {
 	mkdir -p "${PREFIX}"
 	TRAPS+=( "maybe-upload-results --start-seconds=${SECONDS}" )
-	${LINUX32} "${BOOTSTRAP_PREFIX_SH}" "${PREFIX}" noninteractive 2>&1 |
+	declare -px
+	${TIMEOUT:+timeout ${TIMEOUT}} \
+	${LINUX32} \
+	"${BOOTSTRAP_PREFIX_SH}" "${PREFIX}" noninteractive 2>&1 |
 		tee -a "${PREFIX}"/bootstrap.log
-	return ${PIPESTATUS[0]}
+	local ret=${PIPESTATUS[0]}
+	case ${TIMEOUT}:${ret} in
+	:*) # no timeout: report potential error
+		return ${ret}
+		;;
+	*:124) # run into timeout: report success
+		return 0
+		;;
+	esac
+	# done before timeout: report potential error
+	return ${ret}
 }
 
 maybe-upload-results() {

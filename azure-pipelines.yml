@@ -79,7 +79,7 @@ stages:
           timeoutInMinutes: 0
           displayName: 'MacOS Prefix'
 
-  - stage: "Guest"
+  - stage: "Linux_First"
     dependsOn: []
     jobs:
       - job: "Prefix"
@@ -87,110 +87,295 @@ stages:
         strategy:
           matrix:
             fedora:
-              docker_os: fedora
+              from: fedora
+              bit32: no
+              guest: no
             fedora28:
-              docker_os: fedora28
-            opensuseLeap:
-              docker_os: opensuseLeap
-            opensuseTumbleweed:
-              docker_os: opensuseTumbleweed
+              from: fedora28
+              bit32: no
+              guest: no
+            opensuse15:
+              from: opensuse15
+              bit32: no
+              guest: no
+            opensuse16:
+              from: opensuse16
+              bit32: no
+              guest: no
+            ubuntu:
+              from: ubuntu
+              bit32: no
+              guest: no
+            ubuntu16:
+              from: ubuntu16
+              bit32: no
+              guest: no
+
+            guest-fedora:
+              from: fedora
+              bit32: no
+              guest: yes
+            guest-fedora28:
+              from: fedora28
+              bit32: no
+              guest: yes
+            guest-opensuse15:
+              from: opensuse15
+              bit32: no
+              guest: yes
+            guest-opensuse16:
+              from: opensuse16
+              bit32: no
+              guest: yes
+
+            32bit-fedora:
+              from: fedora
+              bit32: yes
+              guest: no
+            32bit-fedora28:
+              from: fedora28
+              bit32: yes
+              guest: no
+            32bit-opensuse15:
+              from: opensuse15
+              bit32: yes
+              guest: no
+            32bit-opensuse16:
+              from: opensuse16
+              bit32: yes
+              guest: no
+            32bit-ubuntu:
+              from: ubuntu
+              bit32: yes
+              guest: no
+            32bit-ubuntu16:
+              from: ubuntu16
+              bit32: yes
+              guest: no
+
+            guest-32bit-fedora:
+              from: fedora
+              bit32: yes
+              guest: yes
+            guest-32bit-fedora28:
+              from: fedora28
+              bit32: yes
+              guest: yes
+            guest-32bit-opensuse15:
+              from: opensuse15
+              bit32: yes
+              guest: yes
+            guest-32bit-opensuse16:
+              from: opensuse16
+              bit32: yes
+              guest: yes
+
         pool:
           vmImage: 'ubuntu-16.04'
         steps:
-        - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
-          displayName: 'Machine Info'
-        - script: ./docker/run-bootstrap.sh --docker-os=$(docker_os) --force-32bit=no --rap=no
-          displayName: '$(docker_os) Prefix Guest'
+        - script: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - script: ./linux/docker-bootstrap.sh --from-os=$(from) --force-32bit=$(bit32) --guest=$(guest) --timeout=4h --docker-push=yes
+          displayName: 'Bootstrap'
           timeoutInMinutes: 0
 
-  - stage: "Guest_32bit"
-    dependsOn: []
+  - stage: "Linux_Second"
+    dependsOn: [ "Linux_First" ]
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0
         strategy:
           matrix:
             fedora:
-              docker_os: fedora
+              from: fedora
+              bit32: no
+              guest: no
             fedora28:
-              docker_os: fedora28
-            opensuseLeap:
-              docker_os: opensuseLeap
-            opensuseTumbleweed:
-              docker_os: opensuseTumbleweed
+              from: fedora28
+              bit32: no
+              guest: no
+            opensuse15:
+              from: opensuse15
+              bit32: no
+              guest: no
+            opensuse16:
+              from: opensuse16
+              bit32: no
+              guest: no
+            ubuntu:
+              from: ubuntu
+              bit32: no
+              guest: no
+            ubuntu16:
+              from: ubuntu16
+              bit32: no
+              guest: no
+
+            guest-fedora:
+              from: fedora
+              bit32: no
+              guest: yes
+            guest-fedora28:
+              from: fedora28
+              bit32: no
+              guest: yes
+            guest-opensuse15:
+              from: opensuse15
+              bit32: no
+              guest: yes
+            guest-opensuse16:
+              from: opensuse16
+              bit32: no
+              guest: yes
+
+            32bit-fedora:
+              from: fedora
+              bit32: yes
+              guest: no
+            32bit-fedora28:
+              from: fedora28
+              bit32: yes
+              guest: no
+            32bit-opensuse15:
+              from: opensuse15
+              bit32: yes
+              guest: no
+            32bit-opensuse16:
+              from: opensuse16
+              bit32: yes
+              guest: no
+            32bit-ubuntu:
+              from: ubuntu
+              bit32: yes
+              guest: no
+            32bit-ubuntu16:
+              from: ubuntu16
+              bit32: yes
+              guest: no
+
+            guest-32bit-fedora:
+              from: fedora
+              bit32: yes
+              guest: yes
+            guest-32bit-fedora28:
+              from: fedora28
+              bit32: yes
+              guest: yes
+            guest-32bit-opensuse15:
+              from: opensuse15
+              bit32: yes
+              guest: yes
+            guest-32bit-opensuse16:
+              from: opensuse16
+              bit32: yes
+              guest: yes
+
         pool:
           vmImage: 'ubuntu-16.04'
         steps:
-        - script: uname -a; cat /proc/cpuinfo; cat /proc/meminfo; declare -p; cat /etc/*-release; ls -l; pwd
-          displayName: 'Machine Info'
-        - script: ./docker/run-bootstrap.sh --docker-os=$(docker_os) --force-32bit=yes --rap=no
-          displayName: '$(docker_os) Prefix Guest 32bit'
+        - script: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - script: ./linux/docker-bootstrap.sh --from-os=$(from) --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --resume=yes --docker-push=true
+          displayName: 'Bootstrap'
           timeoutInMinutes: 0
 
-  - stage: "RAP"
-    dependsOn: []
+
+  - stage: "Linux_Final"
+    dependsOn: [ "Linux_Second" ]
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0
         strategy:
           matrix:
             fedora:
-              docker_os: fedora
+              from: fedora
+              bit32: no
+              guest: no
             fedora28:
-              docker_os: fedora28
-            opensuseTumbleweed:
-              docker_os: opensuseTumbleweed
-            opensuseLeap:
-              docker_os: opensuseLeap
+              from: fedora28
+              bit32: no
+              guest: no
+            opensuse15:
+              from: opensuse15
+              bit32: no
+              guest: no
+            opensuse16:
+              from: opensuse16
+              bit32: no
+              guest: no
             ubuntu:
-              docker_os: ubuntu
+              from: ubuntu
+              bit32: no
+              guest: no
             ubuntu16:
-              docker_os: ubuntu16
-        pool:
-          name: 'Provided Ubuntu 18'
-        steps:
-        - script: uname -a;
-                  cat /proc/cpuinfo;
-                  cat /proc/meminfo;
-                  declare -p;
-                  cat /etc/*-release;
-                  ls -l;
-                  pwd;
-          displayName: 'Machine Info'
-        - script: ./docker/run-bootstrap.sh --docker-cleanup --docker-os=$(docker_os) --force-32bit=no --rap=yes
-          displayName: '$(docker_os) Prefix RAP'
-          timeoutInMinutes: 0
+              from: ubuntu16
+              bit32: no
+              guest: no
 
-  - stage: "RAP_32bit"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            fedora:
-              docker_os: fedora
-            fedora28:
-              docker_os: fedora28
-            opensuseTumbleweed:
-              docker_os: opensuseTumbleweed
-            opensuseLeap:
-              docker_os: opensuseLeap
-            ubuntu:
-              docker_os: ubuntu
-            ubuntu16:
-              docker_os: ubuntu16
+            guest-fedora:
+              from: fedora
+              bit32: no
+              guest: yes
+            guest-fedora28:
+              from: fedora28
+              bit32: no
+              guest: yes
+            guest-opensuse15:
+              from: opensuse15
+              bit32: no
+              guest: yes
+            guest-opensuse16:
+              from: opensuse16
+              bit32: no
+              guest: yes
+
+            32bit-fedora:
+              from: fedora
+              bit32: yes
+              guest: no
+            32bit-fedora28:
+              from: fedora28
+              bit32: yes
+              guest: no
+            32bit-opensuse15:
+              from: opensuse15
+              bit32: yes
+              guest: no
+            32bit-opensuse16:
+              from: opensuse16
+              bit32: yes
+              guest: no
+            32bit-ubuntu:
+              from: ubuntu
+              bit32: yes
+              guest: no
+            32bit-ubuntu16:
+              from: ubuntu16
+              bit32: yes
+              guest: no
+
+            guest-32bit-fedora:
+              from: fedora
+              bit32: yes
+              guest: yes
+            guest-32bit-fedora28:
+              from: fedora28
+              bit32: yes
+              guest: yes
+            guest-32bit-opensuse15:
+              from: opensuse15
+              bit32: yes
+              guest: yes
+            guest-32bit-opensuse16:
+              from: opensuse16
+              bit32: yes
+              guest: yes
+
         pool:
-          name: 'Provided Ubuntu 18'
+          vmImage: 'ubuntu-16.04'
         steps:
-        - script: uname -a;
-                  cat /proc/cpuinfo;
-                  cat /proc/meminfo;
-                  declare -p;
-                  cat /etc/*-release;
-                  ls -l;
-                  pwd;
-          displayName: 'Machine Info'
-        - script: ./docker/run-bootstrap.sh --docker-cleanup --docker-os=$(docker_os) --force-32bit=yes --rap=yes
-          displayName: '$(docker_os) Prefix RAP 32bit'
+        - script: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - script: ./linux/docker-bootstrap.sh --from-os=$(from) --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=true
+          displayName: 'Bootstrap'
           timeoutInMinutes: 0

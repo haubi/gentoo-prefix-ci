@@ -201,6 +201,12 @@ ret=$?
 
 if ${docker_push}
 then
+	if [[ ${ret} != 0 && ${to_image_tag} == 'latest' ]]
+	then
+		# do not push failed image as latest
+		to_image_tag='failed'
+	fi
+
 	docker commit "${docker_container}" "${image_name}:${to_image_tag}" \
 	|| die "Failed to commit container ${docker_container} to ${image_name}:${to_image_tag}"
 

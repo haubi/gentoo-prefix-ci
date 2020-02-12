@@ -181,6 +181,7 @@ stages:
 
   - stage: "Linux_Second"
     dependsOn: [ "Linux_First" ]
+    condition: always()
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0
@@ -282,6 +283,7 @@ stages:
 
   - stage: "Linux_Final"
     dependsOn: [ "Linux_Second" ]
+    condition: always()
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0

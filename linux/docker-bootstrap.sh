@@ -196,15 +196,16 @@ docker_container=$(
 		-c "./sources/linux/resume-bootstrap.sh --proxy=${https_proxy} $*"
 ) || die "Failed to run container using ${image_name}:${from_image_tag}."
 
-docker attach "${docker_container}" \
-|| die "Failed to attach to container ${docker_container}."
-
-docker commit "${docker_container}" "${image_name}:${to_image_tag}" \
-|| die "Failed to commit container ${docker_container} to ${image_name}:${to_image_tag}"
+docker attach "${docker_container}"
+ret=$?
 
 if ${docker_push}
 then
-	docker push "${image_name}:${to_image_tag}"
+	docker commit "${docker_container}" "${image_name}:${to_image_tag}" \
+	|| die "Failed to commit container ${docker_container} to ${image_name}:${to_image_tag}"
+
+	docker push "${image_name}:${to_image_tag}" \
+	|| die "Failed to push image ${image_name}:${to_image_tag}"
 fi
 
-exit $?
+exit ${ret}

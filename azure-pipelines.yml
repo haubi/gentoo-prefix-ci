@@ -175,7 +175,7 @@ stages:
         steps:
         - script: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - script: ./linux/docker-bootstrap.sh --from-os=$(from) --force-32bit=$(bit32) --guest=$(guest) --timeout=4h --docker-push=yes
+        - script: ./linux/docker-bootstrap.sh --from-os=$(from) --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
 
@@ -276,10 +276,9 @@ stages:
         steps:
         - script: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - script: ./linux/docker-bootstrap.sh --from-os=$(from) --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --resume=yes --docker-push=true
+        - script: ./linux/docker-bootstrap.sh --from-os=$(from) --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
-
 
   - stage: "Linux_Final"
     dependsOn: [ "Linux_Second" ]
@@ -378,6 +377,6 @@ stages:
         steps:
         - script: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - script: ./linux/docker-bootstrap.sh --from-os=$(from) --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=true
+        - script: ./linux/docker-bootstrap.sh --from-os=$(from) --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0

@@ -121,6 +121,11 @@ perform-bootstrap() {
 	mkdir -p "${PREFIX}"
 	TRAPS+=( "maybe-upload-results --start-seconds=${SECONDS}" )
 	declare -px
+	if [[ -x ${PREFIX}/startscript ]]
+	then
+		echo "Skipping bootstrap, seems it was successful already."
+		return 0
+	fi
 	${TIMEOUT:+timeout ${TIMEOUT}} \
 	${LINUX32} \
 	"${BOOTSTRAP_PREFIX_SH}" "${PREFIX}" noninteractive 2>&1 |

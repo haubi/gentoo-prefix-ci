@@ -121,7 +121,7 @@ perform-bootstrap() {
 	mkdir -p "${PREFIX}"
 	TRAPS+=( "maybe-upload-results --start-seconds=${SECONDS}" )
 	declare -px
-	if [[ -x ${PREFIX}/startscript ]]
+	if [[ -x ${PREFIX}/startprefix ]]
 	then
 		echo "Skipping bootstrap, seems it was successful already."
 		return 0

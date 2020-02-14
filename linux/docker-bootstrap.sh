@@ -46,6 +46,7 @@ docker_push=false
 force_rap=true
 force_32bit=false
 bootstrap_opts=
+resume_opts=
 build_args=()
 
 proxyvars=( 
@@ -80,15 +81,15 @@ do
 		image_namepart_guest="-guest"
 		;;
 	--resume=no)
-		bootstrap_opts+=" ${arg}"
+		resume_opts+=" ${arg}"
 		from_image_tag=
 		;;
 	--resume=yes)
-		bootstrap_opts+=" ${arg}"
+		resume_opts+=" ${arg}"
 		from_image_tag='intermediate'
 		;;
 	--timeout=*)
-		bootstrap_opts+=" ${arg}"
+		resume_opts+=" ${arg}"
 		to_image_tag='intermediate'
 		;;
 	--from-os=*)
@@ -114,7 +115,7 @@ do
 		PS4='($LINENO)+ '
 		set -x
 		;;
-	*) bootstrap_opts+=" ${arg}" ;;
+	*) resume_opts+=" ${arg}" ;;
 	esac
 done
 
@@ -193,7 +194,7 @@ docker_container=$(
 	docker run \
 		--detach=true \
 		"${image_name}:${from_image_tag}" \
-		-c "./sources/linux/resume-bootstrap.sh --proxy=${https_proxy} $*"
+		-c "./sources/linux/resume-bootstrap.sh ${https_proxy:+--proxy="${https_proxy}"} ${resume_opts}"
 ) || die "Failed to run container using ${image_name}:${from_image_tag}."
 
 docker attach "${docker_container}"

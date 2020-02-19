@@ -194,7 +194,7 @@ docker_container=$(
 	docker run \
 		--detach=true \
 		"${image_name}:${from_image_tag}" \
-		-c "./sources/linux/resume-bootstrap.sh ${https_proxy:+--proxy="${https_proxy}"} ${resume_opts}"
+		-c "sleep 10; ./sources/linux/resume-bootstrap.sh ${https_proxy:+--proxy="${https_proxy}"} ${resume_opts}"
 ) || die "Failed to run container using ${image_name}:${from_image_tag}."
 
 docker attach "${docker_container}"

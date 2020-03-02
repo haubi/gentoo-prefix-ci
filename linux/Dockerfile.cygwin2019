@@ -1,0 +1,23 @@
+
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
+#
+# reminder: RUN does use cmd.exe
+#
+
+ARG BOOTSTRAP_OPTS
+ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
+
+RUN mkdir sources
+
+COPY . ./sources
+
+RUN PowerShell -File ./sources/cygwin/setupv3.ps1
+
+# keep fork working even across replaced binaries
+RUN .\cygwin64\bin\mkdir.exe --mode=a=rwxt /var/run/cygfork
+
+# VSTS Git does checkout in text mode, need to map into cygwin world
+RUN .\cygwin64\bin\mkdir.exe --mode=a=rwxt /sources
+RUN .\cygwin64\bin\bash.exe --noprofile --norc -c "exec 2>&1; echo 'C:/sources /sources auto text,user 0 0' >> /etc/fstab"
+
+ENTRYPOINT ["C:/cygwin64/bin/bash"]

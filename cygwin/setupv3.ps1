@@ -1,10 +1,10 @@
 Set-PSDebug -Trace 2
 
-if ( ! $env:BUILD_BINARIESDIRECTORY ) { exit 1 }
+Get-Location
 
-if ( ! $env:BUILD_ARTIFACTSTAGINGDIRECTORY ) { exit 1 }
+if ( ! $env:TEMP ) { exit 1 }
 
-Set-Location -Path $env:BUILD_BINARIESDIRECTORY
+Set-Location -Path $env:TEMP
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
@@ -12,8 +12,8 @@ $cmds = 'Invoke-WebRequest'
 $cmds += ' -UseBasicParsing'
 $cmds += ' -Uri https://cygwin.com/setup-x86_64.exe'
 $cmds += ' -OutFile setup-x86_64.exe'
-if ( $env:AGENT_PROXYURL ) {
-  $cmds += ' -Proxy $env:AGENT_PROXYURL'
+if ( $env:https_proxy ) {
+  $cmds += ' -Proxy $env:https_proxy'
 }
 
 $cmds += ' | Out-Default'
@@ -35,11 +35,11 @@ $cmds += ' --no-version-check'
 $cmds += ' --only-site'
 $cmds += ' --site http://mirror.easyname.at/cygwin/'
 $cmds += ' --quiet-mode'
-if ( $env:AGENT_PROXYURL ) {
-  $cmds += ' --proxy "$env:AGENT_PROXYURL"'
+if ( $env:https_proxy ) {
+  $cmds += ' --proxy "$env:https_proxy"'
 }
-$cmds += ' --local-package-dir "$env:BUILD_BINARIESDIRECTORY"'
-$cmds += ' --root "$env:BUILD_ARTIFACTSTAGINGDIRECTORY"'
+$cmds += ' --local-package-dir "$env:TEMP"'
+$cmds += ' --root "C:/cygwin64"'
 $cmds += ' --upgrade-also'
 $cmds += ' --verbose'
 $cmds += ' --packages "wget,gcc-g++,rsync"'

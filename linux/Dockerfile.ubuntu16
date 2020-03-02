@@ -2,6 +2,7 @@
 FROM ubuntu:16.04
 
 ARG BOOTSTRAP_OPTS
+ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
 
 # libc6-dev-i386 # python does look for /usr/lib/libcrypt.so file only
 # make           # stage1 make fails with https://bugs.gentoo.org/646558
@@ -25,3 +26,24 @@ RUN set -x \
   ; pkgs="${pkgs} rsync" \
   ; apt-get install -y ${pkgs} \
   ; date -u -R
+
+# Create user
+# Give the user a password
+RUN set -x \
+  ; cat /etc/*-release \
+  ; set -e \
+  ; date -u -R \
+  ; cat /etc/group \
+  ; useradd --user-group --create-home --shell=/bin/bash user \
+  ; ls -la /home/user \
+  ; cat /etc/group \
+  ; echo user:user | chpasswd \
+  ; date -u -R
+
+WORKDIR /home/user
+USER user
+
+RUN mkdir -p ./sources
+COPY . ./sources
+
+ENTRYPOINT ["/bin/bash"]

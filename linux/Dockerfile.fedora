@@ -2,6 +2,7 @@
 FROM fedora
 
 ARG BOOTSTRAP_OPTS
+ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
 
 # gcc-c++                     # would install "gcc-c++.x86_64", but:
 # gcc-c++        gcc-c++.i686 # would install "gcc-c++.i686" only, so need:
@@ -33,3 +34,24 @@ RUN set -x \
   ; pkgs="${pkgs} rsync" \
   ; dnf install -y ${pkgs} \
   ; date -u -R
+
+# Create user
+# Give the user a password
+RUN set -x \
+  ; cat /etc/*-release \
+  ; set -e \
+  ; date -u -R \
+  ; cat /etc/group \
+  ; useradd --user-group --create-home --shell=/bin/bash user \
+  ; ls -la /home/user \
+  ; cat /etc/group \
+  ; echo user:user | chpasswd \
+  ; date -u -R
+
+WORKDIR /home/user
+USER user
+
+RUN mkdir -p ./sources
+COPY . ./sources
+
+ENTRYPOINT ["/bin/bash"]

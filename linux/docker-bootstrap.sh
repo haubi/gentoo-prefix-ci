@@ -181,9 +181,8 @@ then
 	[[ -r ${TOPDIR}/linux/Dockerfile.${from_os} ]] || die "Missing Dockerfile.${from_os}"
 	echo "Creating image based on ${TOPDIR}/linux/Dockerfile.${from_os}"
 	echo "Bootstrap options: ${bootstrap_opts}"
-	cat "${TOPDIR}"/linux/Dockerfile.{${from_os},user,entrypoint} \
-	| docker build \
-		-f - \
+	docker build \
+		-f "${TOPDIR}"/linux/Dockerfile.${from_os} \
 		"${build_args[@]}" \
 		--build-arg=BOOTSTRAP_OPTS="${bootstrap_opts}" \
 		--tag="${image_name}:${from_image_tag}" \
@@ -194,7 +193,7 @@ docker_container=$(
 	docker run \
 		--detach=true \
 		"${image_name}:${from_image_tag}" \
-		-c "sleep 10; ./sources/linux/resume-bootstrap.sh ${https_proxy:+--proxy="${https_proxy}"} ${resume_opts}"
+		-c "type sleep 2>/dev/null || . /etc/profile; sleep 10; ./sources/linux/resume-bootstrap.sh ${https_proxy:+--proxy="${https_proxy}"} ${resume_opts}"
 ) || die "Failed to run container using ${image_name}:${from_image_tag}."
 
 docker attach "${docker_container}"

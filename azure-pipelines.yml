@@ -34,7 +34,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
   - stage: "cygwin2019_Second"
@@ -53,7 +53,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=3h --resume=yes --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=3h --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
   - stage: "cygwin2019_Third"
@@ -72,7 +72,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --resume=yes --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
   - stage: "cygwin2019_Final"
@@ -91,7 +91,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
 
@@ -139,7 +139,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=fedora --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=fedora --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
   - stage: "fedora_Final"
@@ -167,7 +167,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=fedora --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=fedora --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
 
@@ -195,7 +195,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=fedora28 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=fedora28 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
   - stage: "fedora28_Final"
@@ -223,7 +223,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=fedora28 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=fedora28 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
 
@@ -251,7 +251,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=opensuse15 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=opensuse15 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
   - stage: "opensuse15_Final"
@@ -279,7 +279,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=opensuse15 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=opensuse15 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
 
@@ -307,7 +307,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=opensuse16 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=opensuse16 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
   - stage: "opensuse16_Final"
@@ -335,7 +335,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=opensuse16 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=opensuse16 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
 
@@ -357,7 +357,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=ubuntu --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=ubuntu --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
   - stage: "ubuntu_Final"
@@ -379,7 +379,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=ubuntu --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=ubuntu --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
 
@@ -401,7 +401,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=ubuntu16 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=ubuntu16 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
   - stage: "ubuntu16_Final"
@@ -423,6 +423,6 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=ubuntu16 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
+        - bash: ./docker/docker-bootstrap.sh --from-os=ubuntu16 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0

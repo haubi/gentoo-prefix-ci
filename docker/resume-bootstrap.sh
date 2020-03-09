@@ -9,7 +9,7 @@ die() {
 
 TOPDIR=$(dirname "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")")
 
-[[ ${TOPDIR}/linux/resume-bootstrap.sh -ef ${BASH_SOURCE[0]} ]] || die "Failed to find myself (from ${BASH_SOURCE[0]})."
+[[ ${TOPDIR}/docker/resume-bootstrap.sh -ef ${BASH_SOURCE[0]} ]] || die "Failed to find myself (from ${BASH_SOURCE[0]})."
 
 cd "${TOPDIR}" || die
 

@@ -31,7 +31,7 @@ trap 'runtraps' 0
 
 TOPDIR=$(dirname "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")")
 
-[[ ${TOPDIR}/linux/docker-bootstrap.sh -ef ${BASH_SOURCE[0]} ]] || die "Failed to find myself (from ${BASH_SOURCE[0]})."
+[[ ${TOPDIR}/docker/docker-bootstrap.sh -ef ${BASH_SOURCE[0]} ]] || die "Failed to find myself (from ${BASH_SOURCE[0]})."
 
 cd "${TOPDIR}" || die
 
@@ -178,11 +178,11 @@ rmdir "${cleanuplock}"
 if [[ ! ${from_image_tag} ]]
 then
 	from_image_tag='initial'
-	[[ -r ${TOPDIR}/linux/Dockerfile.${from_os} ]] || die "Missing Dockerfile.${from_os}"
-	echo "Creating image based on ${TOPDIR}/linux/Dockerfile.${from_os}"
+	[[ -r ${TOPDIR}/docker/Dockerfile.${from_os} ]] || die "Missing Dockerfile.${from_os}"
+	echo "Creating image based on ${TOPDIR}/docker/Dockerfile.${from_os}"
 	echo "Bootstrap options: ${bootstrap_opts}"
 	docker build \
-		-f "${TOPDIR}"/linux/Dockerfile.${from_os} \
+		-f "${TOPDIR}"/docker/Dockerfile.${from_os} \
 		"${build_args[@]}" \
 		--build-arg=BOOTSTRAP_OPTS="${bootstrap_opts}" \
 		--tag="${image_name}:${from_image_tag}" \
@@ -193,7 +193,7 @@ docker_container=$(
 	docker run \
 		--detach=true \
 		"${image_name}:${from_image_tag}" \
-		-c "type sleep 2>/dev/null || . /etc/profile; sleep 10; ./sources/linux/resume-bootstrap.sh ${https_proxy:+--proxy="${https_proxy}"} ${resume_opts}"
+		-c "type sleep 2>/dev/null || . /etc/profile; sleep 10; ./sources/docker/resume-bootstrap.sh ${https_proxy:+--proxy="${https_proxy}"} ${resume_opts}"
 ) || die "Failed to run container using ${image_name}:${from_image_tag}."
 
 docker attach "${docker_container}"

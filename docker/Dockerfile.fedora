@@ -9,10 +9,6 @@ ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
 # gcc-c++.x86_64 gcc-c++.i686 # to install both, but both just depend on:
 # libstdc++-devel             # without their specific arch - need both
 # glibc-devel.i686 # python does look for /usr/lib/libcrypt.so file only
-# make             # stage1 make fails with https://bugs.gentoo.org/646558
-# m4               # stage1 m4 fails with https://bugs.gentoo.org/663924
-# findutils        # stage1 findutils fails with https://bugs.gentoo.org/663242
-# rsync            # stage3 linux headers require rsync for header install
 RUN set -x \
   ; set -e \
   ; date -u -R \
@@ -28,10 +24,6 @@ RUN set -x \
   ; done \
   ; pkgs="${pkgs} wget" \
   ; pkgs="${pkgs} glibc-devel.i686" \
-  ; pkgs="${pkgs} make" \
-  ; pkgs="${pkgs} m4" \
-  ; pkgs="${pkgs} findutils" \
-  ; pkgs="${pkgs} rsync" \
   ; dnf install -y ${pkgs} \
   ; date -u -R
 

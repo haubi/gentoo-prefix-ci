@@ -5,8 +5,6 @@ ARG BOOTSTRAP_OPTS
 ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
 
 # libc6-dev-i386 # python does look for /usr/lib/libcrypt.so file only
-# make           # stage1 make fails with https://bugs.gentoo.org/646558
-# rsync          # stage3 linux headers require rsync for header install
 RUN set -x \
   ; set -e \
   ; date -u -R \
@@ -22,8 +20,6 @@ RUN set -x \
   ; done \
   ; pkgs="${pkgs} wget" \
   ; pkgs="${pkgs} libc6-dev-i386" \
-  ; pkgs="${pkgs} make" \
-  ; pkgs="${pkgs} rsync" \
   ; apt-get install -y ${pkgs} \
   ; date -u -R
 

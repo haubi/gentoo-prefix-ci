@@ -9,6 +9,7 @@ ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
 # gcc-c++.x86_64 gcc-c++.i686 # to install both, but both just depend on:
 # libstdc++-devel             # without their specific arch - need both
 # glibc-devel.i686 # python does look for /usr/lib/libcrypt.so file only
+# diffutils        # stage1 bzip2 'make test' requires cmp
 RUN set -x \
   ; set -e \
   ; date -u -R \
@@ -24,6 +25,7 @@ RUN set -x \
   ; done \
   ; pkgs="${pkgs} wget" \
   ; pkgs="${pkgs} glibc-devel.i686" \
+  ; pkgs="${pkgs} diffutils" \
   ; dnf install -y ${pkgs} \
   ; date -u -R
 

@@ -5,6 +5,7 @@ ARG BOOTSTRAP_OPTS
 ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
 
 # glibc-devel.i686 # python does look for /usr/lib/libcrypt.so file only
+# diffutils        # stage1 bzip2 'make test' requires cmp
 RUN set -x \
   ; set -e \
   ; date -u -R \
@@ -20,6 +21,7 @@ RUN set -x \
   ; done \
   ; pkgs="${pkgs} wget" \
   ; pkgs="${pkgs} glibc-devel.i686" \
+  ; pkgs="${pkgs} diffutils" \
   ; dnf install -y ${pkgs} \
   ; date -u -R
 

@@ -426,3 +426,171 @@ stages:
         - bash: ./docker/docker-bootstrap.sh --from-os=ubuntu16 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
+
+  - stage: "centos8_First"
+    dependsOn: []
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            rap64:
+              bit32: no
+              guest: no
+            guest64:
+              bit32: no
+              guest: yes
+            rap32:
+              bit32: yes
+              guest: no
+            guest32:
+              bit32: yes
+              guest: yes
+        pool:
+          vmImage: 'ubuntu-16.04'
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --from-os=centos8 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+  - stage: "centos8_Final"
+    dependsOn: [ "centos8_First" ]
+    condition: always()
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            rap64:
+              bit32: no
+              guest: no
+            guest64:
+              bit32: no
+              guest: yes
+            rap32:
+              bit32: yes
+              guest: no
+            guest32:
+              bit32: yes
+              guest: yes
+        pool:
+          vmImage: 'ubuntu-16.04'
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --from-os=centos8 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+
+  - stage: "centos7_First"
+    dependsOn: []
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            rap64:
+              bit32: no
+              guest: no
+            guest64:
+              bit32: no
+              guest: yes
+            rap32:
+              bit32: yes
+              guest: no
+            guest32:
+              bit32: yes
+              guest: yes
+        pool:
+          vmImage: 'ubuntu-16.04'
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --from-os=centos7 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+  - stage: "centos7_Final"
+    dependsOn: [ "centos7_First" ]
+    condition: always()
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            rap64:
+              bit32: no
+              guest: no
+            guest64:
+              bit32: no
+              guest: yes
+            rap32:
+              bit32: yes
+              guest: no
+            guest32:
+              bit32: yes
+              guest: yes
+        pool:
+          vmImage: 'ubuntu-16.04'
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --from-os=centos7 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+
+  - stage: "centos6_First"
+    dependsOn: []
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            rap64:
+              bit32: no
+              guest: no
+            guest64:
+              bit32: no
+              guest: yes
+            rap32:
+              bit32: yes
+              guest: no
+            guest32:
+              bit32: yes
+              guest: yes
+        pool:
+          vmImage: 'ubuntu-16.04'
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --from-os=centos6 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+  - stage: "centos6_Final"
+    dependsOn: [ "centos6_First" ]
+    condition: always()
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        strategy:
+          matrix:
+            rap64:
+              bit32: no
+              guest: no
+            guest64:
+              bit32: no
+              guest: yes
+            rap32:
+              bit32: yes
+              guest: no
+            guest32:
+              bit32: yes
+              guest: yes
+        pool:
+          vmImage: 'ubuntu-16.04'
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --from-os=centos6 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0

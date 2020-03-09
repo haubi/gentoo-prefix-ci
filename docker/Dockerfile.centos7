@@ -1,0 +1,49 @@
+
+FROM centos:8
+
+ARG BOOTSTRAP_OPTS
+ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
+
+# gcc-c++                     # would install "gcc-c++.x86_64", but:
+# gcc-c++        gcc-c++.i686 # would install "gcc-c++.i686" only, so need:
+# gcc-c++.x86_64 gcc-c++.i686 # to install both, but both just depend on:
+# libstdc++-devel             # without their specific arch - need both
+# glibc-devel.i686 # python does look for /usr/lib/libcrypt.so file only
+RUN set -x \
+  ; set -e \
+  ; date -u -R \
+  ; dnf check-update || : \
+  ; date -u -R \
+  ; pkgs="gcc-c++.x86_64 libstdc++-devel.x86_64" \
+  ; for arg in ${BOOTSTRAP_OPTS} \
+  ; do case ${arg} in \
+       --force-32bit=yes) : \
+	     ; pkgs="${pkgs} gcc-c++.i686 libstdc++-devel.i686" \
+		 ;; \
+	   esac \
+  ; done \
+  ; pkgs="${pkgs} wget" \
+  ; pkgs="${pkgs} glibc-devel.i686" \
+  ; dnf install -y ${pkgs} \
+  ; date -u -R
+
+# Create user
+# Give the user a password
+RUN set -x \
+  ; cat /etc/*-release \
+  ; set -e \
+  ; date -u -R \
+  ; cat /etc/group \
+  ; useradd --user-group --create-home --shell=/bin/bash user \
+  ; ls -la /home/user \
+  ; cat /etc/group \
+  ; echo user:user | chpasswd \
+  ; date -u -R
+
+WORKDIR /home/user
+USER user
+
+RUN mkdir -p ./sources
+COPY . ./sources
+
+ENTRYPOINT ["/bin/bash"]

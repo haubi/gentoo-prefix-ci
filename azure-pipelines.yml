@@ -53,7 +53,7 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./linux/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --resume=yes --docker-push=yes
+        - bash: ./linux/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=3h --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
   - stage: "cygwin2019_Third"

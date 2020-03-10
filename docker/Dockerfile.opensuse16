@@ -5,6 +5,7 @@ ARG BOOTSTRAP_OPTS
 ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
 
 # glibc-devel-32bit # python does look for /usr/lib/libcrypt.so file only
+# m4                # stage1 m4 (unpatched) fails with https://bugs.gentoo.org/663924
 RUN set -x \
   ; set -e \
   ; date -u -R \
@@ -24,6 +25,7 @@ RUN set -x \
   ; pkgs="${pkgs} gzip" \
   ; pkgs="${pkgs} shadow" \
   ; pkgs="${pkgs} util-linux" \
+  ; pkgs="${pkgs} m4" \
   ; zypper --non-interactive install ${pkgs} \
   ; date -u -R
 

@@ -6,6 +6,7 @@ ENV BOOTSTRAP_OPTS ${BOOTSTRAP_OPTS:-}
 
 # glibc-devel.i686 # python does look for /usr/lib/libcrypt.so file only
 # diffutils        # stage1 bzip2 'make test' requires cmp
+# m4               # stage1 m4 (unpatched) fails with https://bugs.gentoo.org/663924
 RUN set -x \
   ; set -e \
   ; date -u -R \
@@ -22,6 +23,7 @@ RUN set -x \
   ; pkgs="${pkgs} wget" \
   ; pkgs="${pkgs} glibc-devel.i686" \
   ; pkgs="${pkgs} diffutils" \
+  ; pkgs="${pkgs} m4" \
   ; dnf install -y ${pkgs} \
   ; date -u -R
 

@@ -199,6 +199,11 @@ docker_container=$(
 docker attach "${docker_container}"
 ret=$?
 
+# On Windows, docker commit may hang for unknown reason:
+# Give the container some time to shut down
+# after docker attach has returned.
+sleep 10
+
 if ${docker_push}
 then
 	if [[ ${ret} != 0 && ${to_image_tag} == 'latest' ]]

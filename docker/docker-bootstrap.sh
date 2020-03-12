@@ -200,9 +200,10 @@ docker attach "${docker_container}"
 ret=$?
 
 # On Windows, docker commit may hang for unknown reason:
-# Give the container some time to shut down
+# Try to explicitly stop the container,
 # after docker attach has returned.
-sleep 10
+docker stop "${docker_container}" \
+|| die "Failed to stop container ${docker_container}."
 
 if ${docker_push}
 then

@@ -152,25 +152,25 @@ stages:
           displayName: 'Bootstrap'
           timeoutInMinutes: 0
 
-  - stage: "MacOS"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            current:
-              macOS_version: 'macOS'
-            highSierra:
-              macOS_version: 'macOS High Sierra'
-        pool:
-          name: 'Hosted $(macOS_version)'
-        steps:
-        - script: set
-          displayName: 'MacOS Info'
-        - script: ./macos/prefix.sh
-          timeoutInMinutes: 0
-          displayName: 'MacOS Prefix'
+#  - stage: "MacOS"
+#    dependsOn: []
+#    jobs:
+#      - job: "Prefix"
+#        timeoutInMinutes: 0
+#        strategy:
+#          matrix:
+#            current:
+#              macOS_version: 'macOS'
+#            highSierra:
+#              macOS_version: 'macOS High Sierra'
+#        pool:
+#          name: 'Hosted $(macOS_version)'
+#        steps:
+#        - script: set
+#          displayName: 'MacOS Info'
+#        - script: ./macos/prefix.sh
+#          timeoutInMinutes: 0
+#          displayName: 'MacOS Prefix'
 
   - stage: "fedora_First"
     dependsOn: []

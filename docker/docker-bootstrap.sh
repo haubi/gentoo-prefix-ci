@@ -199,23 +199,23 @@ docker_container=$(
 docker attach "${docker_container}"
 ret=$?
 
+if [[ ${ret} != 0 && ${to_image_tag} == 'latest' ]]
+then
+	# do not tag failed image as latest
+	to_image_tag='failed'
+fi
+
 # On Windows, docker commit may hang for unknown reason:
 # Try to explicitly stop the container,
 # after docker attach has returned.
 docker stop "${docker_container}" \
 || die "Failed to stop container ${docker_container}."
 
+docker commit "${docker_container}" "${image_name}:${to_image_tag}" \
+|| die "Failed to commit container ${docker_container} to ${image_name}:${to_image_tag}"
+
 if ${docker_push}
 then
-	if [[ ${ret} != 0 && ${to_image_tag} == 'latest' ]]
-	then
-		# do not push failed image as latest
-		to_image_tag='failed'
-	fi
-
-	docker commit "${docker_container}" "${image_name}:${to_image_tag}" \
-	|| die "Failed to commit container ${docker_container} to ${image_name}:${to_image_tag}"
-
 	docker push "${image_name}:${to_image_tag}" \
 	|| die "Failed to push image ${image_name}:${to_image_tag}"
 fi

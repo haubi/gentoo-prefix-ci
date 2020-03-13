@@ -205,11 +205,9 @@ then
 	to_image_tag='failed'
 fi
 
-# On Windows, docker commit may hang for unknown reason:
-# Try to explicitly stop the container,
-# after docker attach has returned.
-docker stop "${docker_container}" \
-|| die "Failed to stop container ${docker_container}."
+# On Windows, docker commit may hang for unknown reason
+# after docker attach has returned. Try to wait a little.
+sleep 10
 
 docker commit "${docker_container}" "${image_name}:${to_image_tag}" \
 || die "Failed to commit container ${docker_container} to ${image_name}:${to_image_tag}"

@@ -19,7 +19,6 @@ stages:
           timeoutInMinutes: 0
   - stage: "${{parameters.variant}}_Second"
     dependsOn: [ "${{parameters.variant}}_First" ]
-    condition: succeededOrFailed()
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0
@@ -33,7 +32,6 @@ stages:
           timeoutInMinutes: 0
   - stage: "${{parameters.variant}}_Third"
     dependsOn: [ "${{parameters.variant}}_Second" ]
-    condition: succeededOrFailed()
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0
@@ -47,7 +45,6 @@ stages:
           timeoutInMinutes: 0
   - stage: "${{parameters.variant}}_Fourth"
     dependsOn: [ "${{parameters.variant}}_Third" ]
-    condition: succeededOrFailed()
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0
@@ -61,7 +58,6 @@ stages:
           timeoutInMinutes: 0
   - stage: "${{parameters.variant}}_Fifth"
     dependsOn: [ "${{parameters.variant}}_Fourth" ]
-    condition: succeededOrFailed()
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0
@@ -75,7 +71,6 @@ stages:
           timeoutInMinutes: 0
   - stage: "${{parameters.variant}}_Sixth"
     dependsOn: [ "${{parameters.variant}}_Fifth" ]
-    condition: succeededOrFailed()
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0
@@ -89,7 +84,6 @@ stages:
           timeoutInMinutes: 0
   - stage: "${{parameters.variant}}_Final"
     dependsOn: [ "${{parameters.variant}}_Sixth" ]
-    condition: succeededOrFailed()
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0

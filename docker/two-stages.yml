@@ -19,7 +19,6 @@ stages:
           timeoutInMinutes: 0
   - stage: "${{parameters.variant}}_Final"
     dependsOn: [ "${{parameters.variant}}_First" ]
-    condition: succeededOrFailed()
     jobs:
       - job: "Prefix"
         timeoutInMinutes: 0

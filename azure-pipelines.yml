@@ -19,138 +19,11 @@ schedules:
     always: true
 
 stages:
-  - stage: "cygwin2019_First"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            guest64:
-              bit32: no
-              guest: yes
-        pool:
-          vmImage: windows-2019
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "cygwin2019_Second"
-    dependsOn: [ "cygwin2019_First" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            guest64:
-              bit32: no
-              guest: yes
-        pool:
-          vmImage: windows-2019
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=3h --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "cygwin2019_Third"
-    dependsOn: [ "cygwin2019_Second" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            guest64:
-              bit32: no
-              guest: yes
-        pool:
-          vmImage: windows-2019
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=3h --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "cygwin2019_Fourth"
-    dependsOn: [ "cygwin2019_Third" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            guest64:
-              bit32: no
-              guest: yes
-        pool:
-          vmImage: windows-2019
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=3h --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "cygwin2019_Fifth"
-    dependsOn: [ "cygwin2019_Fourth" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            guest64:
-              bit32: no
-              guest: yes
-        pool:
-          vmImage: windows-2019
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=3h --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "cygwin2019_Sixth"
-    dependsOn: [ "cygwin2019_Fifth" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            guest64:
-              bit32: no
-              guest: yes
-        pool:
-          vmImage: windows-2019
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --timeout=3h --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "cygwin2019_Final"
-    dependsOn: [ "cygwin2019_Sixth" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            guest64:
-              bit32: no
-              guest: yes
-        pool:
-          vmImage: windows-2019
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=cygwin2019 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
+
+  - template: docker/seven-stages.yml
+    parameters:
+        image: windows-2019
+        variant: "guest_64bit_cygwin2019"
 
 #  - stage: "MacOS"
 #    dependsOn: []
@@ -172,482 +45,107 @@ stages:
 #          timeoutInMinutes: 0
 #          displayName: 'MacOS Prefix'
 
-  - stage: "fedora_First"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=fedora --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "fedora_Final"
-    dependsOn: [ "fedora_First" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=fedora --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_64bit_fedora"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_64bit_fedora"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_32bit_fedora"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_32bit_fedora"
 
-  - stage: "fedora28_First"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=fedora28 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "fedora28_Final"
-    dependsOn: [ "fedora28_First" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=fedora28 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_64bit_fedora28"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_64bit_fedora28"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_32bit_fedora28"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_32bit_fedora28"
 
-  - stage: "opensuse15_First"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=opensuse15 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "opensuse15_Final"
-    dependsOn: [ "opensuse15_First" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=opensuse15 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_64bit_opensuse15"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_64bit_opensuse15"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_32bit_opensuse15"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_32bit_opensuse15"
 
-  - stage: "opensuse16_First"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=opensuse16 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "opensuse16_Final"
-    dependsOn: [ "opensuse16_First" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=opensuse16 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_64bit_opensuse16"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_64bit_opensuse16"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_32bit_opensuse16"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_32bit_opensuse16"
 
-  - stage: "ubuntu_First"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            rap32:
-              bit32: yes
-              guest: no
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=ubuntu --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "ubuntu_Final"
-    dependsOn: [ "ubuntu_First" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            rap32:
-              bit32: yes
-              guest: no
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=ubuntu --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_64bit_ubuntu"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_32bit_ubuntu"
 
-  - stage: "ubuntu16_First"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            rap32:
-              bit32: yes
-              guest: no
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=ubuntu16 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "ubuntu16_Final"
-    dependsOn: [ "ubuntu16_First" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            rap32:
-              bit32: yes
-              guest: no
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=ubuntu16 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_64bit_ubuntu16"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_32bit_ubuntu16"
 
-  - stage: "centos8_First"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=centos8 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "centos8_Final"
-    dependsOn: [ "centos8_First" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=centos8 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_64bit_centos8"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_64bit_centos8"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_32bit_centos8"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_32bit_centos8"
 
-  - stage: "centos7_First"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=centos7 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "centos7_Final"
-    dependsOn: [ "centos7_First" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=centos7 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_64bit_centos7"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_64bit_centos7"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_32bit_centos7"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_32bit_centos7"
 
-  - stage: "centos6_First"
-    dependsOn: []
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=centos6 --force-32bit=$(bit32) --guest=$(guest) --timeout=5h --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
-  - stage: "centos6_Final"
-    dependsOn: [ "centos6_First" ]
-    condition: succeededOrFailed()
-    jobs:
-      - job: "Prefix"
-        timeoutInMinutes: 0
-        strategy:
-          matrix:
-            rap64:
-              bit32: no
-              guest: no
-            guest64:
-              bit32: no
-              guest: yes
-            rap32:
-              bit32: yes
-              guest: no
-            guest32:
-              bit32: yes
-              guest: yes
-        pool:
-          vmImage: 'ubuntu-16.04'
-        steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
-          displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --from-os=centos6 --force-32bit=$(bit32) --guest=$(guest) --resume=yes --docker-push=yes
-          displayName: 'Bootstrap'
-          timeoutInMinutes: 0
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_64bit_centos6"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_64bit_centos6"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "rap_32bit_centos6"
+  - template: docker/two-stages.yml
+    parameters:
+        variant: "guest_32bit_centos6"

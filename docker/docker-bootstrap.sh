@@ -36,8 +36,8 @@ TOPDIR=$(dirname "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")")
 cd "${TOPDIR}" || die
 
 image_basename=       # "gentooprefix/prefix"
-image_namepart_guest= # "-guest"
-image_namepart_bits=  # "-32bit"
+image_namepart_guest= # "-rap" or "-guest"
+image_namepart_bits=  # "-64bit" or "-32bit"
 from_os=              # "fedora28"
 from_image_tag= # 'intermediate' upon --resume
 to_image_tag='latest' # 'intermediate' upon --timeout
@@ -65,16 +65,16 @@ do
 		image_basename=${arg#--docker-image-basename=}
 		;;
 	--force-32bit=yes)
-		bootstrap_opts+=" ${arg}"
+		bootstrap_opts+=" --force-32bit=yes"
 		image_namepart_bits="-32bit"
 		;;
 	--force-32bit=no)
-		bootstrap_opts+=" ${arg}"
-		image_namepart_bits=
+		bootstrap_opts+=" --force-32bit=no"
+		image_namepart_bits="-64bit"
 		;;
 	--guest=no)
 		bootstrap_opts+=" --rap=yes"
-		image_namepart_guest=
+		image_namepart_guest="-rap"
 		;;
 	--guest=yes)
 		bootstrap_opts+=" --rap=no"
@@ -94,6 +94,34 @@ do
 		;;
 	--from-os=*)
 		from_os=${arg#--from-os=}
+		;;
+	--variant=*_*_*)
+		variant=${arg#--variant=}
+		case ${variant} in
+		rap_*)
+			image_namepart_guest="-rap"
+			bootstrap_opts+=" --rap=yes"
+			variant=${variant#rap_}
+			;;
+		guest_*)
+			image_namepart_guest="-guest"
+			bootstrap_opts+=" --rap=no"
+			variant=${variant#guest_}
+			;;
+		esac
+		case ${variant} in
+		32bit_*)
+			image_namepart_bits="-32bit"
+			bootstrap_opts+=" --force-32bit=yes"
+			variant=${variant#32bit_}
+			;;
+		64bit_*)
+			image_namepart_bits="-64bit"
+			bootstrap_opts+=" --force-32bit=no"
+			variant=${variant#64bit_}
+			;;
+		esac
+		from_os=${variant}
 		;;
 	--docker-cleanup)
 		docker_cleanup=:

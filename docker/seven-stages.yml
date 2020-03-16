@@ -1,0 +1,103 @@
+parameters:
+    image: 'ubuntu-16.04'
+    variant: '' # 'rap-32bit-fedora'
+
+stages:
+    # guest-32bit-fedora28
+  - stage: "${{parameters.variant}}_First"
+    dependsOn: []
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        pool:
+          vmImage: ${{parameters.image}}
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --variant=${{parameters.variant}} --timeout=5h --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+  - stage: "${{parameters.variant}}_Second"
+    dependsOn: [ "${{parameters.variant}}_First" ]
+    condition: succeededOrFailed()
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        pool:
+          vmImage: ${{parameters.image}}
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --variant=${{parameters.variant}} --timeout=3h --resume=yes --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+  - stage: "${{parameters.variant}}_Third"
+    dependsOn: [ "${{parameters.variant}}_Second" ]
+    condition: succeededOrFailed()
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        pool:
+          vmImage: ${{parameters.image}}
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --variant=${{parameters.variant}} --timeout=3h --resume=yes --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+  - stage: "${{parameters.variant}}_Fourth"
+    dependsOn: [ "${{parameters.variant}}_Third" ]
+    condition: succeededOrFailed()
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        pool:
+          vmImage: ${{parameters.image}}
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --variant=${{parameters.variant}} --timeout=3h --resume=yes --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+  - stage: "${{parameters.variant}}_Fifth"
+    dependsOn: [ "${{parameters.variant}}_Fourth" ]
+    condition: succeededOrFailed()
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        pool:
+          vmImage: ${{parameters.image}}
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --variant=${{parameters.variant}} --timeout=3h --resume=yes --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+  - stage: "${{parameters.variant}}_Sixth"
+    dependsOn: [ "${{parameters.variant}}_Fifth" ]
+    condition: succeededOrFailed()
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        pool:
+          vmImage: ${{parameters.image}}
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --variant=${{parameters.variant}} --timeout=3h --resume=yes --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0
+  - stage: "${{parameters.variant}}_Final"
+    dependsOn: [ "${{parameters.variant}}_Sixth" ]
+    condition: succeededOrFailed()
+    jobs:
+      - job: "Prefix"
+        timeoutInMinutes: 0
+        pool:
+          vmImage: ${{parameters.image}}
+        steps:
+        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+          displayName: 'Docker Login'
+        - bash: ./docker/docker-bootstrap.sh --variant=${{parameters.variant}} --resume=yes --docker-push=yes
+          displayName: 'Bootstrap'
+          timeoutInMinutes: 0

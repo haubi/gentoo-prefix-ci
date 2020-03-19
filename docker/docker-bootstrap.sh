@@ -233,9 +233,17 @@ then
 	to_image_tag='failed'
 fi
 
-# On Windows, docker commit may hang for unknown reason
-# after docker attach has returned. Try to wait a little.
-sleep 10
+if [[ -d /cygdrive ]]
+then
+	# On Windows, docker commit may hang for unknown reason
+	# after docker attach has returned. Try to wait a little.
+	# 10 seconds works for the first run, but second run still hangs
+	ps -eW
+	sleep 10
+	ps -eW
+	sleep 600
+	ps -eW
+fi
 
 docker commit "${docker_container}" "${image_name}:${to_image_tag}" \
 || die "Failed to commit container ${docker_container} to ${image_name}:${to_image_tag}"

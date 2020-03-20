@@ -12,7 +12,7 @@ stages:
         pool:
           vmImage: ${{parameters.image}}
         steps:
-        - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
+        - bash: : docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
         - bash: ./docker/docker-bootstrap.sh --variant=${{parameters.variant}} --timeout=5h --docker-push=yes
           displayName: 'Bootstrap'
@@ -27,6 +27,6 @@ stages:
         steps:
         - bash: docker login --username $(DockerHub_user) --password '$(DockerHub_pass)'
           displayName: 'Docker Login'
-        - bash: ./docker/docker-bootstrap.sh --variant=${{parameters.variant}} --resume=yes --docker-push=yes
+        - bash: : ./docker/docker-bootstrap.sh --variant=${{parameters.variant}} --resume=yes --docker-push=yes
           displayName: 'Bootstrap'
           timeoutInMinutes: 0

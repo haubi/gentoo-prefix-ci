@@ -2,6 +2,8 @@
 
 set -x
 
+uname
+
 die() {
 	${1+printf '*** ' "$@" >&2}
 	exit 1
@@ -233,7 +235,7 @@ then
 	to_image_tag='failed'
 fi
 
-if [[ -d /cygdrive ]]
+if [[ $(uname) == MINGW* ]]
 then
 	# On Windows, docker commit may hang for unknown reason
 	# after docker attach has returned. Try to wait a little.

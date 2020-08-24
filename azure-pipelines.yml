@@ -20,10 +20,10 @@ schedules:
 
 stages:
 
-  - template: docker/seven-stages.yml
-    parameters:
-        image: windows-2019
-        variant: "guest_64bit_cygwin2019"
+# - template: docker/seven-stages.yml
+#   parameters:
+#       image: windows-2019
+#       variant: "guest_64bit_cygwin2019"
 
 #  - stage: "MacOS"
 #    dependsOn: []
